@@ -1,7 +1,7 @@
 # AppBudget
 Application de gestion d'un budget personnel.
 
-![This is an alt text.](./schema.jpg "Schéma du l'appilcation pour la gestion d'un budget personnel.")
+![Schéma de l'application.](./schema.jpg "Schéma du l'appilcation pour la gestion d'un budget personnel.")
 
 Application pour tenir le budget d'un ménage.
 Nous avons en :
