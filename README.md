@@ -15,7 +15,7 @@ Nous avons en :
 
 ### Planning
 
-![Planning de l'application.](./planningB.png "Planning de l'appilcation pour la gestion d'un budget personnel.")
+![Planning de l'application.](./planning.png "Planning de l'appilcation pour la gestion d'un budget personnel.")
 
 ### Structure du projet
 
