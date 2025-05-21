@@ -18,7 +18,7 @@ Nous avons en :
 ![Planning de l'application.](./planning.png "Planning de l'appilcation pour la gestion d'un budget personnel.")
 
 ### Structure du projet
-
+```
 └── Personal_Budget
     ├── .gitignore
     ├── schema.jpg
@@ -42,3 +42,4 @@ Nous avons en :
     └── OpenAndSave.class
         ├── OpenFile method
         └── SaveFile method
+```
