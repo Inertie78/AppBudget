@@ -7,13 +7,14 @@ package appBudget;
  import java.awt.BorderLayout;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class  FenetrePrincipale extends JFrame
 					implements ActionListener, MouseListener, MouseMotionListener{
 		
 
 	private static final long serialVersionUID = 1L;
-	private MenuFenetre mf;
+	private WindowMenu wm;
 
 	public FenetrePrincipale(String titre, int larg, int haut)
 	{
@@ -22,9 +23,9 @@ public class  FenetrePrincipale extends JFrame
 		super(titre);
 
 		// Créer la barre de menus
-		mf = new MenuFenetre(this);
+		wm = new WindowMenu(this);
 		// Ajouter la barre de menus à la fenêtre
-		setJMenuBar(mf);
+		setJMenuBar(wm);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// Taille et positon de la fenêtre principale
@@ -35,9 +36,16 @@ public class  FenetrePrincipale extends JFrame
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		
-		MyPanel panel = new MyPanel();
 		
-		add(panel, BorderLayout.WEST); 
+		
+		JPanel main_panel = new JPanel();
+		
+		main_panel.setLayout(new BorderLayout());
+		main_panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+		main_panel.add(WindowForm.createFormPanel(), BorderLayout.WEST);
+		
+		add(main_panel, BorderLayout.WEST); 
 
 
 		setVisible(true);

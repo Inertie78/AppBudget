@@ -27,12 +27,14 @@ public class MainApp {
 		
 		EventQueue.invokeLater(new Runnable() {                     //attends que tout soit fini avant d'aller plus loin 
 			public void run() {
-				try {
+				try {		
 					FenetrePrincipale win = new FenetrePrincipale("Mon Budget", 1000, 1000);
 					win.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
+				
 				}
+				WindowMenu wm = new WindowMenu()
 			}
 		});
 	}
