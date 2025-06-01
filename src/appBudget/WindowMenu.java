@@ -4,10 +4,10 @@ import javax.swing.*;
 
 public class WindowMenu  extends JMenuBar
 {
-	public JMenuItem menuQuitter, menuNouveau, menuApropos;
-	private FenetrePrincipale parent;
+	public JMenuItem menuQuit, menuNew, menuOpen, menuSave, menuApropos;
+	private MainApp parent;
 
-	public WindowMenu(FenetrePrincipale _parent)
+	public WindowMenu(MainApp _parent)
 	{
 		parent = _parent;
 		
@@ -15,17 +15,25 @@ public class WindowMenu  extends JMenuBar
 		JMenu menuFichier = new JMenu("Fichier");
 
 		// Créer les items du menu Fichier
-		menuNouveau = new JMenuItem("Nouveau");
-		menuQuitter = new JMenuItem("Quitter");
+		menuNew = new JMenuItem("Nouveau");
+		menuOpen = new JMenuItem("Ouvrir");
+		menuSave = new JMenuItem("Enregistrer");
+		menuQuit = new JMenuItem("Quitter");
 
 		// Inscrire les événements
-		menuNouveau.addActionListener(parent);
-		menuQuitter.addActionListener(parent);
+		menuNew.addActionListener(parent);
+		menuOpen.addActionListener(parent);
+		menuSave.addActionListener(parent);
+		menuQuit.addActionListener(parent);
 
 		// Ajouter les items au menu Fichier
-		menuFichier.add(menuNouveau);
-		menuFichier.addSeparator();  // Ajouter un séparateur
-		menuFichier.add(menuQuitter);
+		menuFichier.add(menuNew);
+		menuFichier.addSeparator();
+		menuFichier.add(menuOpen);
+		menuFichier.addSeparator();
+		menuFichier.add(menuSave);
+		menuFichier.addSeparator();  
+		menuFichier.add(menuQuit);
 
 		// Créer le menu Aide
 		JMenu menuAide = new JMenu("Aide");

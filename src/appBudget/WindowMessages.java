@@ -7,14 +7,14 @@ import javax.swing.*;
 
 public class  WindowMessages extends JDialog implements ActionListener
 {
-	private FenetrePrincipale parent;
+	private MainApp parent;
 	private JButton boutonOk;
 	
 	public WindowMessages(JFrame _parent, String title, String texte)
 	{
 		// true --> dialogue modal
 		super(_parent, title, true);
-		parent = (FenetrePrincipale)_parent;
+		parent = (MainApp)_parent;
 
 		setLayout(new GridLayout(2, 1));
 

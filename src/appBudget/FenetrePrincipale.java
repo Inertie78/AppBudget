@@ -13,7 +13,6 @@ public class  FenetrePrincipale extends JFrame
 					implements ActionListener, MouseListener, MouseMotionListener{
 		
 
-	private static final long serialVersionUID = 1L;
 	private WindowMenu wm;
 
 	public FenetrePrincipale(String titre, int larg, int haut)
