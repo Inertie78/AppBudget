@@ -1,117 +1,118 @@
-
 import java.awt.Color;
 import java.awt.Font;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.*;
 
-public class BudgetModel {
-	
-	String day;
-	String month;
-	String year;
+import javax.swing.table.AbstractTableModel;
 
-	private ArrayList<String> dateList;
-	private ArrayList<String> libelleList;
-	private ArrayList<String> creditList;
-	private ArrayList<String> debitList;
+public class BudgetModel extends AbstractTableModel {
+
+	private static final long serialVersionUID = 1L;
 	
-	public String accountCredit = "150";
-	public String accountDebit = "100";
-	public String accountSolde = "50";
+	private final List<Account> accounttList;
+	
+	private String day, month, year;
 	
 	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
 	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
 	public final Color colorSelect = Color.cyan;
 	
 	public BudgetModel() {
-		dateList = new ArrayList<String>();
-		libelleList = new ArrayList<String>();
-		creditList = new ArrayList<String>();
-		debitList = new ArrayList<String>();
+		
+		accounttList = new ArrayList<Account>();
 	}
-	
-	private PropertyChangeSupport support = new PropertyChangeSupport(this);
+
+	 @Override
+	 public String getColumnName(int col) {
+	    return switch (col) {
+	        case 0 -> "Date";
+	        case 1 -> "Libellé";
+	        case 2 -> "Crédit";
+	        case 3 -> "Débit";
+	        case 4 -> "Action";
+	        default -> "";
+	    };
+	 }
 	 
-	public List<String> getDate() {
-		return this.dateList;
-	}
+	@Override
+    public Object getValueAt(int row, int col) {
+		Account account = accounttList.get(row);
+		Float credit = account.getCredit();
+		Float debit = account.getDebit();
+		if(credit == 0) {
+			credit = null;
+		}else {
+			debit = null;
+		}
+        return switch (col) {
+            case 0 -> account.getDate();
+            case 1 -> account.getLibelle();
+            case 2 -> credit;
+            case 3 -> debit;
+            default -> null;
+        };
+    }
 	
+	 @Override
+	 public boolean isCellEditable(int row, int col) {
+		 return col != 0 && col != 1 && col != 2 && col != 3 ;
+	 }
+
+	@Override
+	public int getRowCount() {
+		// TODO Auto-generated method stub
+		return accounttList.size();
+	}
+
+	@Override
+	public int getColumnCount() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
+
+	public void addEntry( String libelle,  Float credit, Float debit) {
+		String date = day + "." + month + "." + year;
+		Account account = new Account(date, libelle, credit, debit);
+		accounttList.add(account);
+		
+	    fireTableRowsInserted(accounttList.size() - 1, accounttList.size() - 1);
+	 }
+	 
 	public void setDay(String value) {
         day = value;
     }
 	
-	public void setMonth(String value) {
-		
+	public void setMonth(String value) {	
         month = value;
     }
 	
 	public void setYear(String value) {
         year = value;
     }
-
-
-	public void setDate() {
-		String date = day + " " + month + " " + year;
-	    this.dateList.add(date);
-	}
 	
-	public List<String> getLibelle() {
-		return this.libelleList;
-	}
-
-	public void setLibelle(String libelle) {
-	    this.libelleList.add(libelle);
-	}
-	
-	public List<String> getCredit() {
-	    return this.creditList;
-	}
-	
-	public void setCredit(String credit) {
-	    this.creditList.add(credit);
-	}
-	
-	public List<String> getDedit() {
-	    return this.debitList;
-	}
-	
-	public void setDedit(String debit) {
-	    this.debitList.add(debit);
-	}
-	
-	public void removeItem(int index) {
-		dateList.remove(index);
-		libelleList.remove(index);
-		creditList.remove(index);
-		debitList.remove(index);	
-	}
-	
-	public String getAccountCredit() {
-	    return this.accountCredit;
-	}
-	
-	public void setAccountCredit(String accountCredit) {
-	    this.accountCredit = accountCredit;
-	}
-	
-	public String getAccountDebit() {
-	    return this.accountDebit;
-	}
-	
-	public void setAccountDebit(String accountDebit) {
-	    this.accountDebit = accountDebit;
-	}
-	
-	public String getAccountSolde() {
-	    return this.accountSolde;
-	}
-	
-	public void serAccountSolde(String accountSolde) {
-	    this.accountSolde = accountSolde;
-	}
-	
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-	    support.addPropertyChangeListener(listener);
-	}
+	public Float getAccountCredit(){
+        Float value = 0.0f;
+		if (!accounttList.isEmpty()) {
+			Account ac = accounttList.get(accounttList.size());
+			value =  ac.getSoldeCredit();
+        }
+		return value;
+    }
+  
+	public Float getAccountDebit(){
+		Float value = 0.0f;
+		if (!accounttList.isEmpty()) {
+			Account ac = accounttList.get(accounttList.size());
+			value =  ac.getSoldeDebit();
+        }
+		return value;
+    }
+    
+	public Float getAccountSolde(){
+		Float value = 0.0f;
+		if (!accounttList.isEmpty()) {
+			Account ac = accounttList.get(accounttList.size());
+			value =  ac.getSolde();
+        }
+		return value;	
+    }
 }

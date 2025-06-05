@@ -45,6 +45,8 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
             }else if(labels[i] == "Montant"){
             	JPanel montantPanel = new JPanel();
             	fields[i] = new JTextField(values[i], 5);
+            	fields[i].setFont(model.tahomaFont12);
+            	fields[i].setForeground(model.colorSelect);
             	JLabel labelMontant = new JLabel("CHF");
             	montantPanel.add(fields[i]);
             	montantPanel.add(labelMontant);
@@ -72,18 +74,22 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
         // Inscrire les événements+
         btnCredit.addActionListener(_ -> {
         	if(checkInput()) {
-        		
-        	}else {}
+        		controller.addTransaction((String) fields[0].getText(), Float.parseFloat(fields[1].getText()), 0.0f);
+        		clearFields();
+        	}else {
+        		clearFields();
+        	}
         });
 
         btnDebit.addActionListener(_ -> {
 			if(checkInput()) {
-			        		
-			}else {}
+			     controller.addTransaction((String) fields[0].getText(), 0.0f, Float.parseFloat(fields[1].getText()));
+			     clearFields();
+			}else {
+				clearFields();
+			}
         });
 
-        model.addPropertyChangeListener(this);
- 
         add(btnCredit, gbc);
         
         gbc.gridx = 1;
@@ -92,15 +98,19 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 	
 	private Boolean checkInput() {
 		Boolean check = false;
-		for (int i = 0; i < labels.length; i++) { 
+		for (int i = 0; i < fields.length - 1; i++) { 
 			String value = fields[i].getText();
 			if (!value.isEmpty()) {
-				check = false;
+				check = true;
 			}else {
-				check =  true;
+				check =  false;
 			}
 		}
 		return check;
+	}
+	
+	private void clearFields() {
+		for (int i = 0; i < fields.length-1; i++) {fields[i].setText("");}
 	}
 	
 	// public List<String> getValue(Boolean creditCLick){
@@ -155,17 +165,22 @@ class IntFilter extends DocumentFilter {
 	      sb.append(doc.getText(0, doc.getLength()));
 	      sb.insert(offset, string);
 
-	      if (test(sb.toString())) {
+	      if (check(sb.toString())) {
 	         super.insertString(fb, offset, string, attr);
 	      } else {
 	         // warn the user and don't allow the insert
 	      }
 	   }
 
-	   private boolean test(String text) {
+	   private boolean check(String text) {
 	      try {
-	         Integer.parseInt(text);
-	         return true;
+	    	  if(text == "") {
+	    		  return true;
+	    	  }else {
+	    		  Float.parseFloat(text);
+	    		  return true;
+	    	  }
+	         
 	      } catch (NumberFormatException e) {
 	         return false;
 	      }
@@ -180,7 +195,7 @@ class IntFilter extends DocumentFilter {
 	      sb.append(doc.getText(0, doc.getLength()));
 	      sb.replace(offset, offset + length, text);
 
-	      if (test(sb.toString())) {
+	      if (check(sb.toString())) {
 	         super.replace(fb, offset, length, text, attrs);
 	      } else {
 	         // warn the user and don't allow the insert

@@ -7,6 +7,11 @@ public class BudgetController {
         this.model = model;
     }
 	
+	public void addTransaction(String libelle,  Float credit, Float debit) {
+        // ici tu pourrais ajouter validation des données
+        model.addEntry(libelle, credit, debit);
+    }
+	
 	public void setDay(String value) {
         model.setDay(value);
     }
@@ -17,21 +22,5 @@ public class BudgetController {
 	
 	public void setYear(String value) {
         model.setYear(value);
-    }
-
-    public void setDate() {
-        model.setDate();
-    }
-
-    public void setLibelle(String value) {
-        model.setLibelle(value);
-    }
-    
-    public void setCredit(String value) {
-        model.setCredit(value);
-    }
-    
-    public void setDedit(String value) {
-        model.setDedit(value);
     }
 }

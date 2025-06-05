@@ -1,13 +1,11 @@
 import javax.swing.*;
 
 import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
 import javax.swing.JComboBox;
 
-public class DatePicker extends JPanel implements PropertyChangeListener{
+public class DatePicker extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,27 +40,24 @@ public class DatePicker extends JPanel implements PropertyChangeListener{
         }
         
         dayComboBox.addActionListener(_ -> {
-        	controller.setDay((String)dayComboBox.getSelectedItem());
+        	int value = (int) dayComboBox.getSelectedItem();
+        	String day;
+        	if(value < 10) {
+        		day = "0" + String.valueOf(value);
+        	}else {day = String.valueOf(value);}
+        	controller.setDay(day);
         });
         
         monthComboBox.addActionListener(_ -> {
-        	controller.setMonth((String)monthComboBox.getSelectedItem());
+        	controller.setMonth((String) monthComboBox.getSelectedItem());
         });
         
         yearComboBox.addActionListener(_ -> {
-        	controller.setYear((String)yearComboBox.getSelectedItem());
+        	controller.setYear(String.valueOf(yearComboBox.getSelectedItem()));
         });
         
-        model.addPropertyChangeListener(this);
-
         add(dayComboBox);
         add(monthComboBox);
         add(yearComboBox);
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		
 	}
 }

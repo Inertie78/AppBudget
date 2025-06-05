@@ -1,5 +1,4 @@
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
@@ -13,23 +12,28 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 	
 	public JComboBox<String> comboBox;
-	public DefaultTableModel tableModel;
-	public JTable table;
+	private JTable table;
+	private JLabel labelTotalCredit;
+	private JLabel labelTotalDebit;
+	private JLabel labelSolde;
+	private BudgetModel model;
 
 	public WindowTable(BudgetModel model, BudgetController controller){
 		
 		setBorder(new EmptyBorder(50, 25, 50, 0));
 		setLayout(new BorderLayout());
 		
+		this.model = model;
+		
 		String s1[] = { "Select date"};
 		comboBox = new JComboBox<>(s1);
-		comboBox.setFont(model.tahomaFont12);
-		comboBox.setForeground(model.colorSelect);
+		comboBox.setFont(this.model.tahomaFont12);
+		comboBox.setForeground(this.model.colorSelect);
 		comboBox.setSelectedIndex(0);
 		//comboBox.addItemListener(parent);
 		
 		JLabel labelComboBox = new JLabel("Select date");
-		labelComboBox.setFont(model.tahomaFont12);
+		labelComboBox.setFont(this.model.tahomaFont12);
 
 		
 		JPanel panelComboBox = new JPanel();
@@ -39,19 +43,20 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		add(panelComboBox, BorderLayout.NORTH);
 		
 		
-		// Modèle de table
-        tableModel = new DefaultTableModel(new String[]{"Date", "Libellé", "Crédit", "Débit", "Action"}, 0){
- 
-			private static final long serialVersionUID = 1L;
-			@Override
-            public boolean isCellEditable(int row, int column) {
-                return column != 0 && column != 1 && column != 2 && column != 3 ; // Toutes les cellules sont non modifiables
-            }
-        };
-        
-        table = new JTable(tableModel);
+		JTable table = new JTable(this.model);
 		//table.setDefaultRenderer(Object.class, new AlternatingRowRenderer());
-        table.setFont(model.tahomaFont12);
+        table.setFont(this.model.tahomaFont12);
+        
+        // Centrer le texte dans les cellules
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+        	table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
+        // Add custom renderer and editor for the "Action" column
+     	table.getColumn("Action").setCellRenderer(new ButtonRenderer(model));
+     	table.getColumn("Action").setCellEditor(new ButtonEditor(this, model, new JCheckBox()));
         
         // Ajout de la table dans un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
@@ -68,18 +73,18 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	    gbc.gridy = 0;
 	    
 	    JLabel labelTotal = new JLabel("Total");
-        labelTotal.setFont(model.tahomaFont12);
-        labelTotal.setForeground(model.colorSelect);
+        labelTotal.setFont(this.model.tahomaFont12);
+        labelTotal.setForeground(this.model.colorSelect);
         gbc.gridx = 0;
         panelInfo.add(labelTotal, gbc);
         
-        JLabel labelTotalCrdeit = new JLabel("CHF " + model.getAccountCredit());
-        labelTotalCrdeit.setFont(model.tahomaFont12);
-        labelTotalCrdeit.setForeground(model.colorSelect);
+        labelTotalCredit = new JLabel("CHF " + "0.0");
+        labelTotalCredit.setFont(model.tahomaFont12);
+        labelTotalCredit.setForeground(model.colorSelect);
         gbc.gridx = 2;
-        panelInfo.add(labelTotalCrdeit, gbc);
+        panelInfo.add(labelTotalCredit, gbc);
         
-        JLabel labelTotalDebit = new JLabel("CHF " + model.getAccountDebit());
+        labelTotalDebit = new JLabel("CHF " + "0.0");
         labelTotalDebit.setFont(model.tahomaFont12);
         labelTotalDebit.setForeground(model.colorSelect);
         gbc.gridx = 3;
@@ -87,13 +92,13 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 
         gbc.gridy = 1;
         
-        JLabel labelSolde = new JLabel("Solde:");
+        labelSolde = new JLabel("Solde:");
         labelSolde.setFont(model.tahomaFont12);
         labelSolde.setForeground(model.colorSelect);
         gbc.gridx = 0;
         panelInfo.add(labelSolde, gbc);
         
-        JLabel labelBaalance = new JLabel("CHF " + model.getAccountSolde());
+        JLabel labelBaalance = new JLabel("CHF " + "0.0");
         labelBaalance.setFont(model.tahomaFont12);
         labelBaalance.setForeground(model.colorSelect);
         gbc.gridx = 2;
@@ -105,8 +110,6 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	}
 	
 	public void setRow(BudgetModel model, String date, String libelle, String credit, String debit) {
-		tableModel.addRow(new Object[]{date, libelle, credit, debit});
-		
 		
 		// Centrer le texte dans les cellules
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -145,7 +148,9 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
-		
+		 labelTotalCredit.setText("CHF " + model.getAccountCredit());
+	     labelTotalDebit.setText("CHF " + model.getAccountDebit());
+	     labelSolde.setText("CHF " + model.getAccountSolde());		
 	}
 }
 
@@ -184,7 +189,7 @@ class ButtonEditor extends DefaultCellEditor {
 	     button.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
-            parent.tableModel.removeRow(row);
+            //parent.tableModel.removeRow(row);
                
                // Remove an item by value
                parent.comboBox.removeItemAt(row + 1);
