@@ -40,15 +40,4 @@ public class WindowMain extends JFrame{
 		 pack();
 		 setVisible(true);
 	}
-	
-	// Ajoute les valeurs à la table
-	//private void appendTable(Boolean creditCLick) {
-		// List<String> stringArray = wf.getValue(creditCLick);
-		//if(stringArray.get(4) == "false") {
-		//	JOptionPane.showMessageDialog(contentPanel, "Veuillez remplir tout les champs !");
-		//}else {
-			//(String date, String libelle, String credit, String debit)
-			//wt.setRow(stringArray.get(0), stringArray.get(1), stringArray.get(2), stringArray.get(3));
-		//}
-	//}
 }

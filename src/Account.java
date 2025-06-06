@@ -1,4 +1,3 @@
-
 public class Account {
 	private String date;
 	private String libelle;

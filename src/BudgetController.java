@@ -1,4 +1,3 @@
-
 public class BudgetController {
 	
 	private BudgetModel model;
@@ -11,6 +10,10 @@ public class BudgetController {
         // ici tu pourrais ajouter validation des données
         model.addEntry(libelle, credit, debit);
     }
+	
+	public void removeRow(int index) {
+	    model.removeRow(index);
+	}
 	
 	public void setDay(String value) {
         model.setDay(value);

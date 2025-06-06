@@ -18,11 +18,15 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 	private DatePicker dp;
 	private String[] labels = {"Libellé", "Montant", "Date"};
 	private JTextField[] fields = new JTextField[labels.length];
+	private BudgetModel model;
 	
 	public WindowForms(BudgetModel model, BudgetController controller){
 		
+		this.model = model;
+		
 		String[] values = {"", ""};
-		setFont(model.tahomaFont12);
+		
+		setFont(this.model.tahomaFont12);
 		setBorder(new EmptyBorder(0, 0, 0, 25));
 		setLayout(new GridBagLayout());
 	    GridBagConstraints gbc = new GridBagConstraints();
@@ -35,18 +39,18 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 
             JLabel label = new JLabel();
             label.setText(labels[i] + ":");
-            label.setFont(model.tahomaFont12);
+            label.setFont(this.model.tahomaFont12);
             add(label, gbc);
             
             gbc.gridx = 1;
             if(labels[i] == "Date") {
-            	dp = new DatePicker(model, controller);
+            	dp = new DatePicker(this.model, controller);
             	add(dp, gbc);
             }else if(labels[i] == "Montant"){
             	JPanel montantPanel = new JPanel();
             	fields[i] = new JTextField(values[i], 5);
-            	fields[i].setFont(model.tahomaFont12);
-            	fields[i].setForeground(model.colorSelect);
+            	fields[i].setFont(this.model.tahomaFont12);
+            	fields[i].setForeground(this.model.colorSelect);
             	JLabel labelMontant = new JLabel("CHF");
             	montantPanel.add(fields[i]);
             	montantPanel.add(labelMontant);
@@ -55,8 +59,8 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
                 doc.setDocumentFilter(new IntFilter());    
             }else {
             	fields[i] = new JTextField(values[i], 15);
-            	fields[i].setFont(model.tahomaFont12);
-            	fields[i].setForeground(model.colorSelect);
+            	fields[i].setFont(this.model.tahomaFont12);
+            	fields[i].setForeground(this.model.colorSelect);
             	add(fields[i], gbc);
             }
         }
@@ -77,7 +81,9 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
         		controller.addTransaction((String) fields[0].getText(), Float.parseFloat(fields[1].getText()), 0.0f);
         		clearFields();
         	}else {
+        		//Rajouter message d'erreur
         		clearFields();
+
         	}
         });
 
@@ -86,7 +92,9 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 			     controller.addTransaction((String) fields[0].getText(), 0.0f, Float.parseFloat(fields[1].getText()));
 			     clearFields();
 			}else {
+				//Rajouter message d'erreur
 				clearFields();
+				
 			}
         });
 
@@ -98,55 +106,25 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 	
 	private Boolean checkInput() {
 		Boolean check = false;
+		String day = this.model.getDay();
+		String month = this.model.getMonth();
+		String year = this.model.getYear();
+		
 		for (int i = 0; i < fields.length - 1; i++) { 
 			String value = fields[i].getText();
-			if (!value.isEmpty()) {
+			if (!value.isEmpty() && day != null && month != null  && year != null) {
 				check = true;
 			}else {
 				check =  false;
 			}
 		}
+
 		return check;
 	}
 	
 	private void clearFields() {
 		for (int i = 0; i < fields.length-1; i++) {fields[i].setText("");}
 	}
-	
-	// public List<String> getValue(Boolean creditCLick){
-	// List<String> stringArray = new ArrayList<String>();
-	//	 String date= "", libelle = "", debit = "", credit = "", boolValue = "";
-	//	 for (int i = 0; i < labels.length; i++) {
-			 //		String key = labels[i];
-	//	if(key == "Date") {
-				//			String day = String.valueOf(dp.dayComboBox.getSelectedItem());
-	//	String month = String.valueOf(dp.monthComboBox.getSelectedItem());
-	//	String year = String.valueOf(dp.yearComboBox.getSelectedItem());
-	//		date = day + " " + month + " " + year;
-				
-				//	}else {
-	//String value = fields[i].getText();
-	//	if (!value.isEmpty()) {
-	//		if(key == "Montant") {
-	//				if(creditCLick) {
-	//				credit = value;
-	//				} else {debit = value;}
-	//			} else {libelle = value;}
-	//			fields[i].setText("");
-	//			boolValue = "true";
-	//	        } else {
-	//	        	boolValue = "false";           
-	//		        }	
-	//		}
-	//	}
-	//		stringArray.add(date);
-		//	stringArray.add(libelle);
-	//		stringArray.add(credit);
-	//	stringArray.add(debit);
-		//		stringArray.add(boolValue);
-			
-	//      return stringArray;
-	//  }
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

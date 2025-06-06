@@ -24,7 +24,7 @@ public class DatePicker extends JPanel{
 
         // Month ComboBox
         JComboBox<String> monthComboBox = new JComboBox<>(new String[]{
-            "January", "February", "March", "April", "May", "June",
+           "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
          });
          monthComboBox.setFont(model.tahomaFont12);

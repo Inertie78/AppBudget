@@ -1,16 +1,22 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 import javax.swing.table.AbstractTableModel;
 
 public class BudgetModel extends AbstractTableModel {
+	
+	private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	private static final long serialVersionUID = 1L;
 	
 	private final List<Account> accounttList;
 	
 	private String day, month, year;
+	
+	private Float credit, debit;
 	
 	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
 	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
@@ -75,7 +81,24 @@ public class BudgetModel extends AbstractTableModel {
 		accounttList.add(account);
 		
 	    fireTableRowsInserted(accounttList.size() - 1, accounttList.size() - 1);
+	    
+	    Float old = this.credit;
+	    
+        this.credit = credit;
+        support.firePropertyChange("Credit", old, this.credit);
+        
+        old = this.debit;
+        this.debit = debit;
+        support.firePropertyChange("debit", old,  this.debit);
+        
 	 }
+	
+	public void removeRow(int index) {
+	    if (index >= 0 && index < accounttList.size()) {
+	    	accounttList.remove(index);
+	        fireTableRowsDeleted(index, index);
+	    }
+	}
 	 
 	public void setDay(String value) {
         day = value;
@@ -89,20 +112,41 @@ public class BudgetModel extends AbstractTableModel {
         year = value;
     }
 	
+	public String getDay() {
+		return this.day;
+    }
+	
+	public String getMonth() {	
+		return this.month;
+    }
+	
+	public String getYear() {
+        return this.year;
+    }
+
 	public Float getAccountCredit(){
         Float value = 0.0f;
 		if (!accounttList.isEmpty()) {
-			Account ac = accounttList.get(accounttList.size());
-			value =  ac.getSoldeCredit();
+			Account account = accounttList.get(accounttList.size() - 1);
+			value =  account.getSoldeCredit();
         }
 		return value;
     }
+	
+	public String getDate() {
+		String date = "";
+		if (!accounttList.isEmpty()) {
+			Account account = accounttList.get(accounttList.size() - 1);
+			date =  account.getDate();
+        }
+		return date;
+	}
   
 	public Float getAccountDebit(){
 		Float value = 0.0f;
 		if (!accounttList.isEmpty()) {
-			Account ac = accounttList.get(accounttList.size());
-			value =  ac.getSoldeDebit();
+			Account account = accounttList.get(accounttList.size() - 1);
+			value =  account.getSoldeDebit();
         }
 		return value;
     }
@@ -110,9 +154,13 @@ public class BudgetModel extends AbstractTableModel {
 	public Float getAccountSolde(){
 		Float value = 0.0f;
 		if (!accounttList.isEmpty()) {
-			Account ac = accounttList.get(accounttList.size());
+			Account ac = accounttList.get(accounttList.size() - 1);
 			value =  ac.getSolde();
         }
 		return value;	
+    }
+	
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
     }
 }
