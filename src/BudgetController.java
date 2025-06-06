@@ -8,6 +8,8 @@ public class BudgetController {
 	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
 	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
 	public final Color colorSelect = Color.cyan;
+	public final Color colorColumn_01 = new java.awt.Color(80, 80, 80);
+	public final Color colorColumn_02 = new java.awt.Color(60, 60, 60);
 	
 	
 	public BudgetController(BudgetModel model) {

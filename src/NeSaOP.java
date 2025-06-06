@@ -44,9 +44,7 @@ public class NeSaOP {
                 
                 Float credit = 0.0f;
                 Float debit = 0.0f;
-                System.out.println(isNumeric(values[2]));
-                System.out.println(values[2]);
-                    
+              
                 if(isNumeric(values[2])) {credit = Float.parseFloat(values[2]);}
                 if(isNumeric(values[3])) {debit = Float.parseFloat(values[3]);}
                 

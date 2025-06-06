@@ -40,7 +40,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		    public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
 		        java.awt.Component c = super.prepareRenderer(renderer, row, column);
 		        if (!isRowSelected(row)) {
-		            c.setBackground(row % 2 == 0 ? new java.awt.Color(80, 80, 80): new java.awt.Color(60, 60, 60)); // Gris clair
+		            c.setBackground(row % 2 == 0 ? controller.colorColumn_01: controller.colorColumn_02); // Gris clair
 		        } else {
 		            c.setBackground(getSelectionBackground());
 		        }
