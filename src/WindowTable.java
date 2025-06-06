@@ -1,5 +1,6 @@
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +12,13 @@ import java.beans.PropertyChangeListener;
 public class WindowTable extends JPanel implements PropertyChangeListener{	
 	private static final long serialVersionUID = 1L;
 	
-	public JComboBox<String> comboDates;
+	public JComboBox<String> comboxDates;
 	private JLabel labelTotalCredit;
 	private JLabel labelTotalDebit;
 	private JLabel labelBalance;
 	private BudgetModel model;
+	private static JTable table;
+	private static TableRowSorter<BudgetModel> sorter;
 
 	public WindowTable(BudgetModel model, BudgetController controller){
 		
@@ -24,23 +27,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		
 		this.model = model;
 		
-		String s1[] = { "Select date"};
-		comboDates = new JComboBox<>(s1);
-		comboDates.setFont(this.model.tahomaFont12);
-		comboDates.setForeground(this.model.colorSelect);
-		comboDates.setSelectedIndex(0);
-		
-		JLabel labelComboBox = new JLabel("Select date");
-		labelComboBox.setFont(this.model.tahomaFont12);
-
-		
-		JPanel panelComboBox = new JPanel();
-		panelComboBox.setBorder(new EmptyBorder(0, 0, 25, 0));
-		panelComboBox.add(labelComboBox);
-		panelComboBox.add(comboDates);
-		add(panelComboBox, BorderLayout.NORTH);
-		
-		JTable table = new JTable(this.model){
+		table = new JTable(this.model){
 		    /**
 			 * 
 			 */
@@ -58,6 +45,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		    }
 		};
 		
+
 		//table.setDefaultRenderer(Object.class, new AlternatingRowRenderer());
         table.setFont(this.model.tahomaFont12);
 	    
@@ -90,10 +78,40 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		        return component;
 		    }
 		});
+		
+		sorter = new TableRowSorter<>(this.model);
+		
+	    table.setRowSorter(sorter);
      	
         // Ajout de la table dans un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
+        
+		String s1[] = { "Select date"};
+		comboxDates = new JComboBox<>(s1);
+		comboxDates.setFont(this.model.tahomaFont12);
+		comboxDates.setForeground(this.model.colorSelect);
+		comboxDates.setSelectedIndex(0);
+		
+		JLabel labelComboBox = new JLabel("Select date");
+		labelComboBox.setFont(this.model.tahomaFont12);
+
+		
+		JPanel panelComboBox = new JPanel();
+		panelComboBox.setBorder(new EmptyBorder(0, 0, 25, 0));
+		panelComboBox.add(labelComboBox);
+		panelComboBox.add(comboxDates);
+		add(panelComboBox, BorderLayout.NORTH);
+		
+		comboxDates.addActionListener(_ -> {
+	        String selectedDate = (String) comboxDates.getSelectedItem();
+	        if ("Select date".equals(selectedDate)) {
+	            sorter.setRowFilter(null); // retire le filtre
+	        } else {
+	            sorter.setRowFilter(RowFilter.regexFilter("^" + selectedDate + "$", 0)); // colonne 2 = date
+	        }
+	    });
+		
         
         //Ajout des infos sur le budget
         JPanel panelInfo = new JPanel();
@@ -154,15 +172,15 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
      	boolean existe = false;
      	String date = model.getDate();
 
-     	for (int i = 0; i < comboDates.getItemCount(); i++) {
-     	    if (comboDates.getItemAt(i).equals(date) || date == "") {
+     	for (int i = 0; i < comboxDates.getItemCount(); i++) {
+     	    if (comboxDates.getItemAt(i).equals(date) || date == "") {
      	        existe = true;
      	        break;
      	    }
      	}
 
      	if (!existe) {
-     	    comboDates.addItem(date);
+     		comboxDates.addItem(date);
      	}
 	}
 }
@@ -201,10 +219,13 @@ class ButtonEditor extends DefaultCellEditor {
     
 	     button.addActionListener(new ActionListener() {
            @Override
-           public void actionPerformed(ActionEvent e) {               
+           public void actionPerformed(ActionEvent e) {
+        	   //Ajouter un message pour demander si on est sur de vouloir supprimer la ligne.
                // Remove line in table
         	   model.removeRow(row);
-        	   parent.comboDates.removeItemAt(row + 1);
+        	   if(parent.comboxDates.getItemCount() > 1) {
+        		   parent.comboxDates.removeItemAt(row + 1);
+        	   }
            }
        });
 	 };

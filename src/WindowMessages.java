@@ -28,7 +28,6 @@ public class WindowMessages extends JDialog{
 
 		contentPane.add(labelPane);
 		
-	
 		JPanel boutonPane = new JPanel();
 		// Créer le bouton
 		boutonOk = new JButton("Ok");

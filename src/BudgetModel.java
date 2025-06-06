@@ -16,7 +16,7 @@ public class BudgetModel extends AbstractTableModel {
 	
 	private String day, month, year;
 	
-	private Float credit, debit;
+	private float credit, debit, soldeCredit, soldeDebit, solde;
 	
 	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
 	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
@@ -76,8 +76,20 @@ public class BudgetModel extends AbstractTableModel {
 	}
 
 	public void addEntry( String libelle,  Float credit, Float debit) {
+		if(accounttList.isEmpty()) {
+			soldeCredit = credit;
+			soldeDebit = debit;
+			solde = this.soldeCredit - this.soldeDebit;
+		}else {
+			Account acc = accounttList.get(accounttList.size() - 1);
+			soldeCredit = acc.getSoldeCredit() + credit;
+			soldeDebit = acc.getSoldeDebit() + debit;
+			solde = acc.getSolde() + (credit - debit);
+		}
+		
 		String date = day + "." + month + "." + year;
-		Account account = new Account(date, libelle, credit, debit);
+		Account account = new Account(date, libelle, credit, debit, soldeCredit, soldeDebit, solde);
+		
 		accounttList.add(account);
 		
 	    fireTableRowsInserted(accounttList.size() - 1, accounttList.size() - 1);
@@ -89,14 +101,44 @@ public class BudgetModel extends AbstractTableModel {
         
         old = this.debit;
         this.debit = debit;
-        support.firePropertyChange("debit", old,  this.debit);
+        support.firePropertyChange("Debit", old,  this.debit);
         
 	 }
 	
 	public void removeRow(int index) {
 	    if (index >= 0 && index < accounttList.size()) {
+	    	
+	    	//Mise à jour du compte
+	    	Account accountRemove = accounttList.get(index);
+	    	Float soldeCreditRemove = accountRemove.getSoldeCredit() + credit;
+	    	Float soldeDebitRemove = accountRemove.getSoldeDebit() + debit;
+
+			Account acc = accounttList.get(accounttList.size() - 1);
+			
+			Float soldeCredit = acc.getSoldeCredit() - soldeCreditRemove;
+			Float soldeDebit = acc.getSoldeDebit() - soldeDebitRemove;
+			Float solde = acc.getSolde() - (credit - debit);
+			
+			acc.setSoldeCredit(soldeCredit);
+			acc.setSoldeDebit(soldeDebit);
+			acc.setSolde(solde);
+
+			//Delete ligne du tableau et delete account de accountList
 	    	accounttList.remove(index);
 	        fireTableRowsDeleted(index, index);
+	        
+	        Float old = this.soldeCredit;
+		    
+	        this.soldeCredit = soldeCredit;
+	        support.firePropertyChange("Solde Credit", old, this.soldeCredit);
+	        
+	        old = this.soldeDebit;
+	        this.soldeDebit = soldeDebit;
+	        support.firePropertyChange("Solde Debit", old,  this.soldeDebit);
+	        
+	        old = this.solde;
+	        this.solde = solde;
+	        support.firePropertyChange("Solde", old,  this.solde);
 	    }
 	}
 	 
