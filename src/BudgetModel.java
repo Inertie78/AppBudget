@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Font;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
@@ -18,10 +16,7 @@ public class BudgetModel extends AbstractTableModel {
 	
 	private float credit, debit, soldeCredit, soldeDebit, solde;
 	
-	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
-	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
-	public final Color colorSelect = Color.cyan;
-	
+
 	public BudgetModel() {
 		
 		accounttList = new ArrayList<Account>();
@@ -44,11 +39,9 @@ public class BudgetModel extends AbstractTableModel {
 		Account account = accounttList.get(row);
 		Float credit = account.getCredit();
 		Float debit = account.getDebit();
-		if(credit == 0) {
-			credit = null;
-		}else {
-			debit = null;
-		}
+		if(credit == 0) {credit = null;}
+		if(debit == 0) {debit = null;}
+		
         return switch (col) {
             case 0 -> account.getDate();
             case 1 -> account.getLibelle();
@@ -87,7 +80,7 @@ public class BudgetModel extends AbstractTableModel {
 			solde = acc.getSolde() + (credit - debit);
 		}
 		
-		String date = day + "." + month + "." + year;
+		String date = day + " " + month + " " + year;
 		Account account = new Account(date, libelle, credit, debit, soldeCredit, soldeDebit, solde);
 		
 		accounttList.add(account);

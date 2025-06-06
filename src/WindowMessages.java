@@ -7,7 +7,7 @@ public class WindowMessages extends JDialog{
 	private static final long serialVersionUID = 1L;
 	public JButton boutonOk;
 	
-	public WindowMessages(JFrame parent, BudgetModel model, String title, String texte){
+	public WindowMessages(JFrame parent, BudgetController controller, String title, String texte){
 		// true --> dialogue modal
 		
 		super(parent, title, true);
@@ -21,7 +21,7 @@ public class WindowMessages extends JDialog{
 
 		// Créer le label pour le texte
 		JLabel label = new JLabel(texte, JLabel.CENTER);
-		label.setFont(model.tahomaFont12);
+		label.setFont(controller.tahomaFont12);
 		labelPane.add(label);
 		
 		labelPane.setBorder(new EmptyBorder(0, 0, 25, 0));
@@ -31,7 +31,7 @@ public class WindowMessages extends JDialog{
 		JPanel boutonPane = new JPanel();
 		// Créer le bouton
 		boutonOk = new JButton("Ok");
-		boutonOk.setFont(model.tahomaFont12);
+		boutonOk.setFont(controller.tahomaFont12);
 		boutonOk.addActionListener((_) -> {
 			dispose();
 	    });

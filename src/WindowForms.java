@@ -8,25 +8,19 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-public class WindowForms extends JPanel implements PropertyChangeListener{
+public class WindowForms extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	
 	private DatePicker dp;
 	private String[] labels = {"Libellé", "Montant", "Date"};
 	private JTextField[] fields = new JTextField[labels.length];
-	private BudgetModel model;
 	
-	public WindowForms(BudgetModel model, BudgetController controller){
-		
-		this.model = model;
-		
+	public WindowForms(BudgetController controller){
+	
 		String[] values = {"", ""};
 		
-		setFont(this.model.tahomaFont12);
+		setFont(controller.tahomaFont12);
 		setBorder(new EmptyBorder(0, 0, 0, 25));
 		setLayout(new GridBagLayout());
 	    GridBagConstraints gbc = new GridBagConstraints();
@@ -39,18 +33,18 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 
             JLabel label = new JLabel();
             label.setText(labels[i] + ":");
-            label.setFont(this.model.tahomaFont12);
+            label.setFont(controller.tahomaFont12);
             add(label, gbc);
             
             gbc.gridx = 1;
             if(labels[i] == "Date") {
-            	dp = new DatePicker(this.model, controller);
+            	dp = new DatePicker(controller);
             	add(dp, gbc);
             }else if(labels[i] == "Montant"){
             	JPanel montantPanel = new JPanel();
             	fields[i] = new JTextField(values[i], 5);
-            	fields[i].setFont(this.model.tahomaFont12);
-            	fields[i].setForeground(this.model.colorSelect);
+            	fields[i].setFont(controller.tahomaFont12);
+            	fields[i].setForeground(controller.colorSelect);
             	JLabel labelMontant = new JLabel("CHF");
             	montantPanel.add(fields[i]);
             	montantPanel.add(labelMontant);
@@ -59,8 +53,8 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
                 doc.setDocumentFilter(new IntFilter());    
             }else {
             	fields[i] = new JTextField(values[i], 15);
-            	fields[i].setFont(this.model.tahomaFont12);
-            	fields[i].setForeground(this.model.colorSelect);
+            	fields[i].setFont(controller.tahomaFont12);
+            	fields[i].setForeground(controller.colorSelect);
             	add(fields[i], gbc);
             }
         }
@@ -72,29 +66,27 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
         JButton btnDebit = new JButton("Débit");
         
         //Font menu add
-        btnCredit.setFont(model.tahomaFont12);
-        btnDebit.setFont(model.tahomaFont12);
+        btnCredit.setFont(controller.tahomaFont12);
+        btnDebit.setFont(controller.tahomaFont12);
 
         // Inscrire les événements+
         btnCredit.addActionListener(_ -> {
-        	if(checkInput()) {
-        		controller.addTransaction((String) fields[0].getText(), Float.parseFloat(fields[1].getText()), 0.0f);
+        	if(checkInput(controller)) {
+        		controller.addEntry((String) fields[0].getText(), Float.parseFloat(fields[1].getText()), 0.0f);
         		clearFields();
         	}else {
         		//Rajouter message d'erreur
         		clearFields();
-
         	}
         });
 
         btnDebit.addActionListener(_ -> {
-			if(checkInput()) {
-			     controller.addTransaction((String) fields[0].getText(), 0.0f, Float.parseFloat(fields[1].getText()));
+			if(checkInput(controller)) {
+			     controller.addEntry((String) fields[0].getText(), 0.0f, Float.parseFloat(fields[1].getText()));
 			     clearFields();
 			}else {
 				//Rajouter message d'erreur
-				clearFields();
-				
+				clearFields();		
 			}
         });
 
@@ -104,11 +96,11 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
         add(btnDebit, gbc);
 	}
 	
-	private Boolean checkInput() {
+	private Boolean checkInput(BudgetController controller) {
 		Boolean check = false;
-		String day = this.model.getDay();
-		String month = this.model.getMonth();
-		String year = this.model.getYear();
+		String day = controller.getDay();
+		String month = controller.getMonth();
+		String year = controller.getYear();
 		
 		for (int i = 0; i < fields.length - 1; i++) { 
 			String value = fields[i].getText();
@@ -124,11 +116,6 @@ public class WindowForms extends JPanel implements PropertyChangeListener{
 	
 	private void clearFields() {
 		for (int i = 0; i < fields.length-1; i++) {fields[i].setText("");}
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub	
 	}
 }
 

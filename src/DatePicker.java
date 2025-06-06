@@ -9,14 +9,14 @@ public class DatePicker extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
-	public DatePicker(BudgetModel model, BudgetController controller) {
+	public DatePicker(BudgetController controller) {
 		
 		setLayout(new FlowLayout());
 
         // Day ComboBox
 		JComboBox<Integer> dayComboBox = new JComboBox<>();
-        dayComboBox.setFont(model.tahomaFont12);
-        dayComboBox.setForeground(model.colorSelect);
+        dayComboBox.setFont(controller.tahomaFont12);
+        dayComboBox.setForeground(controller.colorSelect);
 
         for (int i = 1; i <= 31; i++) {
             dayComboBox.addItem(i);
@@ -27,13 +27,13 @@ public class DatePicker extends JPanel{
            "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
          });
-         monthComboBox.setFont(model.tahomaFont12);
-         monthComboBox.setForeground(model.colorSelect);
+         monthComboBox.setFont(controller.tahomaFont12);
+         monthComboBox.setForeground(controller.colorSelect);
 
         // Year ComboBox
          JComboBox<Integer> yearComboBox = new JComboBox<>();
-        yearComboBox.setFont(model.tahomaFont12);
-        yearComboBox.setForeground(model.colorSelect);
+        yearComboBox.setFont(controller.tahomaFont12);
+        yearComboBox.setForeground(controller.colorSelect);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = currentYear - 50; i <= currentYear + 100; i++) {
             yearComboBox.addItem(i);

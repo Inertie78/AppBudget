@@ -1,38 +1,63 @@
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.*;
 
 public class WindowMenu  extends JMenuBar{
 	
 	static final long serialVersionUID = 1L;
 
-	public WindowMenu(JFrame parent, BudgetModel model, BudgetController controller){
+	public WindowMenu(WindowMain parent, WindowTable windowTable, BudgetController controller){
+		
+		NeSaOP nesaop = new NeSaOP();
 		
 		// Créer la menu Fichier
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.setFont(model.tahomaFont14);
+		fileMenu.setFont(controller.tahomaFont14);
 		
 		// Créer les items du menu Fichier
 		JMenuItem newMenu = new JMenuItem("New");
 		JMenuItem openMenu = new JMenuItem("Open");
-		JMenuItem saveMenu = new JMenuItem("Open");
+		JMenuItem saveMenu = new JMenuItem("Save");
 		JMenuItem quitMenu = new JMenuItem("Quit");
 
 		//Font menu add
-		newMenu.setFont(model.tahomaFont12);
-		openMenu.setFont(model.tahomaFont12);
-		saveMenu.setFont(model.tahomaFont12);
-		quitMenu.setFont(model.tahomaFont12);
+		newMenu.setFont(controller.tahomaFont12);
+		openMenu.setFont(controller.tahomaFont12);
+		saveMenu.setFont(controller.tahomaFont12);
+		quitMenu.setFont(controller.tahomaFont12);
 		
 		// Inscrire les événements
 		newMenu.addActionListener((_) -> {
-   	
+			parent.restartUI();
 		});
 		
 		openMenu.addActionListener((_) -> {
+			JFileChooser fileChooser = new JFileChooser();
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				try {
+					nesaop.loadRows(file, controller);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Erreur lors la lecture du fichier csv" + e.getMessage());
+				}
+			}
       	
 		});
 		
 		saveMenu.addActionListener((_) -> {
-      	
+			
+			if (windowTable.table.getRowCount() > 0) {
+				JFileChooser fileChooser = new JFileChooser();
+				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					nesaop.saveTableToCSV(controller, windowTable.table, file);
+				}
+			}else {
+				//Message la table est vide
+				JOptionPane.showMessageDialog(null, "la table est vide");
+			}
 		});
 		
 		quitMenu.addActionListener((_) -> {
@@ -53,13 +78,13 @@ public class WindowMenu  extends JMenuBar{
 		// Créer le menu Aide
 		JMenu helpMenu = new JMenu("Help");
 		
-		helpMenu.setFont(model.tahomaFont14);
+		helpMenu.setFont(controller.tahomaFont14);
 
 		// Créer l'item du menu Aide
 		JMenuItem aboutMenu = new JMenuItem("About");
 		
 		//Font menu add
-		aboutMenu.setFont(model.tahomaFont12);
+		aboutMenu.setFont(controller.tahomaFont12);
 
 		// Inscire l'événement
 		//aboutMenu.addActionListener(parent);
@@ -74,7 +99,7 @@ public class WindowMenu  extends JMenuBar{
 		
 		aboutMenu.addActionListener((_) -> {
 			String message = "<html>Création d'un budget personnel<br><br>Version de l'appilcation 1.0<br><br>Christophe et Guillaume</html>";
-			new WindowMessages(parent, model, "About", message);  	
+			new WindowMessages(parent, controller, "About", message);  	
 		});
 	}
 }
