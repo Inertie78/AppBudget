@@ -4,11 +4,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 
 public class NeSaOP {
 	
-	public void saveTableToCSV(BudgetController controller, JTable table, File file) {
+	public void saveTableToCSV(BudgetController controller, WindowTable windowTable, File file) {
 		try (FileWriter fw = new FileWriter(file)) {
 
 	        // Écrire les données
@@ -21,17 +20,15 @@ public class NeSaOP {
 	        }
 
 	        fw.flush();
-	        JOptionPane.showMessageDialog(null, "Fichier sauvegardé avec succès !");
+	        JOptionPane.showMessageDialog(windowTable,"Fichier sauvegardé avec succès !", "Information", JOptionPane.INFORMATION_MESSAGE);
 	    } catch (IOException e) {
-	        JOptionPane.showMessageDialog(null, "Erreur lors de la sauvegarde : " + e.getMessage());
+	        JOptionPane.showMessageDialog(windowTable, "Erreur lors de la sauvegarde : " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
 	
-	public void loadRows(File csvFile, BudgetController controller) throws IOException {
+	public void loadRows(File csvFile, WindowTable windowTable, BudgetController controller) throws IOException {
 	    try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
 	        String line;
-	        boolean isFirstLine = true;
-
 	        while ((line = reader.readLine()) != null) {
 	            String[] values = line.split(",", -1); // -1 to include empty values
 	            
@@ -51,7 +48,7 @@ public class NeSaOP {
                 controller.addEntry(values[1], credit, debit);
 	        }
 	    }catch (IOException e) {
-	        JOptionPane.showMessageDialog(null, "Erreur lors de l'ouvertur du fichier csv" + e.getMessage());
+	        JOptionPane.showMessageDialog(windowTable, "Erreur lors de l'ouvertur du fichier csv" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
 	

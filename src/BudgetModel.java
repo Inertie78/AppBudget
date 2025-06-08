@@ -1,6 +1,7 @@
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -10,16 +11,19 @@ public class BudgetModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final List<Account> accounttList;
+	private final List<Account> accountList;
 	
 	private String day, month, year;
 	
 	private float credit, debit, soldeCredit, soldeDebit, solde;
 	
+	private List<Account> filteredData;
+	
 
 	public BudgetModel() {
 		
-		accounttList = new ArrayList<Account>();
+		accountList = new ArrayList<Account>();
+		filteredData = new ArrayList<Account>();
 	}
 
 	 @Override
@@ -36,7 +40,7 @@ public class BudgetModel extends AbstractTableModel {
 	 
 	@Override
     public Object getValueAt(int row, int col) {
-		Account account = accounttList.get(row);
+		Account account = filteredData.get(row);
 		Float credit = account.getCredit();
 		Float debit = account.getDebit();
 		if(credit == 0) {credit = null;}
@@ -59,7 +63,7 @@ public class BudgetModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 		// TODO Auto-generated method stub
-		return accounttList.size();
+		return filteredData.size();
 	}
 
 	@Override
@@ -69,23 +73,24 @@ public class BudgetModel extends AbstractTableModel {
 	}
 
 	public void addEntry( String libelle,  Float credit, Float debit) {
-		if(accounttList.isEmpty()) {
+		if(accountList.isEmpty()) {
 			soldeCredit = credit;
 			soldeDebit = debit;
 			solde = this.soldeCredit - this.soldeDebit;
 		}else {
-			Account acc = accounttList.get(accounttList.size() - 1);
-			soldeCredit = acc.getSoldeCredit() + credit;
-			soldeDebit = acc.getSoldeDebit() + debit;
-			solde = acc.getSolde() + (credit - debit);
+			Account account = accountList.get(accountList.size() - 1);
+			soldeCredit = account.getSoldeCredit() + credit;
+			soldeDebit = account.getSoldeDebit() + debit;
+			solde = account.getSolde() + (credit - debit);
 		}
 		
 		String date = day + " " + month + " " + year;
 		Account account = new Account(date, libelle, credit, debit, soldeCredit, soldeDebit, solde);
 		
-		accounttList.add(account);
-		
-	    fireTableRowsInserted(accounttList.size() - 1, accounttList.size() - 1);
+		accountList.add(account);
+		filteredData = accountList;
+	
+	    fireTableRowsInserted(filteredData.size() - 1, filteredData.size() - 1);
 	    
 	    Float old = this.credit;
 	    
@@ -99,14 +104,14 @@ public class BudgetModel extends AbstractTableModel {
 	 }
 	
 	public void removeRow(int index) {
-	    if (index >= 0 && index < accounttList.size()) {
+	    if (index >= 0 && index < accountList.size()) {
 	    	
 	    	//Mise à jour du compte
-	    	Account accountRemove = accounttList.get(index);
+	    	Account accountRemove = accountList.get(index);
 	    	Float soldeCreditRemove = accountRemove.getSoldeCredit() + credit;
 	    	Float soldeDebitRemove = accountRemove.getSoldeDebit() + debit;
 
-			Account acc = accounttList.get(accounttList.size() - 1);
+			Account acc = accountList.get(accountList.size() - 1);
 			
 			Float soldeCredit = acc.getSoldeCredit() - soldeCreditRemove;
 			Float soldeDebit = acc.getSoldeDebit() - soldeDebitRemove;
@@ -117,7 +122,8 @@ public class BudgetModel extends AbstractTableModel {
 			acc.setSolde(solde);
 
 			//Delete ligne du tableau et delete account de accountList
-	    	accounttList.remove(index);
+	    	accountList.remove(index);
+	    	filteredData = accountList;
 	        fireTableRowsDeleted(index, index);
 	        
 	        Float old = this.soldeCredit;
@@ -134,7 +140,32 @@ public class BudgetModel extends AbstractTableModel {
 	        support.firePropertyChange("Solde", old,  this.solde);
 	    }
 	}
-	 
+	
+	public Set<String> getFilteredDates(String date) {
+	    return filteredData.stream()
+	        .filter(row -> date == null || date.equals("Select date") || row.getDate().equals(date))
+	        .map(row -> (String) row.getDate())
+	        .collect(Collectors.toSet());
+	}
+
+
+	public Set<String> getFilteredLibelles(String libelle) {
+	    return filteredData.stream()
+	        .filter(row -> libelle == null || libelle.equals("Select libellé") || row.getLibelle().equals(libelle))
+	        .map(row -> (String) row.getLibelle())
+	        .collect(Collectors.toSet());
+	}
+	
+	public void applyFilters(String date, String label) {
+        filteredData = accountList.stream()
+            .filter(row ->
+                (date == null || date.equals("Select date") || row.getDate().equals(date)) &&
+                (label == null || label.equals("Select libellé") || row.getLibelle().equals(label))
+            )
+            .toList();     
+        fireTableDataChanged();
+    }
+
 	public void setDay(String value) {
         day = value;
     }
@@ -161,8 +192,8 @@ public class BudgetModel extends AbstractTableModel {
 
 	public Float getAccountCredit(){
         Float value = 0.0f;
-		if (!accounttList.isEmpty()) {
-			Account account = accounttList.get(accounttList.size() - 1);
+		if (!filteredData.isEmpty()) {
+			Account account = filteredData.get(filteredData.size() - 1);
 			value =  account.getSoldeCredit();
         }
 		return value;
@@ -170,17 +201,26 @@ public class BudgetModel extends AbstractTableModel {
 	
 	public String getDate() {
 		String date = "";
-		if (!accounttList.isEmpty()) {
-			Account account = accounttList.get(accounttList.size() - 1);
+		if (!filteredData.isEmpty()) {
+			Account account = filteredData.get(filteredData.size() - 1);
 			date =  account.getDate();
         }
 		return date;
 	}
+	
+	public String getLibelle() {
+		String libelle = "";
+		if (!filteredData.isEmpty()) {
+			Account account = filteredData.get(filteredData.size() - 1);
+			libelle =  account.getLibelle();
+        }
+		return libelle;
+	}
   
 	public Float getAccountDebit(){
 		Float value = 0.0f;
-		if (!accounttList.isEmpty()) {
-			Account account = accounttList.get(accounttList.size() - 1);
+		if (!filteredData.isEmpty()) {
+			Account account = filteredData.get(filteredData.size() - 1);
 			value =  account.getSoldeDebit();
         }
 		return value;
@@ -188,13 +228,13 @@ public class BudgetModel extends AbstractTableModel {
     
 	public Float getAccountSolde(){
 		Float value = 0.0f;
-		if (!accounttList.isEmpty()) {
-			Account ac = accounttList.get(accounttList.size() - 1);
+		if (!accountList.isEmpty()) {
+			Account ac = filteredData.get(filteredData.size() - 1);
 			value =  ac.getSolde();
         }
 		return value;	
     }
-	
+
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }

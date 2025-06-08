@@ -1,6 +1,5 @@
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableRowSorter;
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
@@ -8,12 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class WindowTable extends JPanel implements PropertyChangeListener{	
 	private static final long serialVersionUID = 1L;
-	
+
 	public JTable table;
+	
 	public JComboBox<String> comboxDates;
+	public JComboBox<String> comboxLibelle;
 	
 	private JLabel labelTotalCredit;
 	private JLabel labelTotalDebit;
@@ -21,8 +24,8 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	
 	private BudgetController controller;
 
-	private static TableRowSorter<BudgetModel> sorter;
-
+	//private static TableRowSorter<BudgetModel> sorter;
+	
 	public WindowTable(BudgetModel model, BudgetController controller){
 		
 		this.controller = controller;
@@ -61,10 +64,6 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
      	table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
      	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
 
-		sorter = new TableRowSorter<>(model);
-		
-	    table.setRowSorter(sorter);
-     	
         // Ajout de la table dans un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -75,26 +74,39 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		comboxDates.setForeground(this.controller.colorSelect);
 		comboxDates.setSelectedIndex(0);
 		
-		JLabel labelComboBox = new JLabel("Select date");
-		labelComboBox.setFont(this.controller.tahomaFont12);
+		JLabel labelComboBoxDate = new JLabel("Select date");
+		labelComboBoxDate.setFont(this.controller.tahomaFont12);
+		
+		comboxDates.addActionListener(_ -> { onFilterChanged(); });
+		
+		JPanel panelComboBoxDate = new JPanel();
+		panelComboBoxDate.setBorder(new EmptyBorder(0, 0, 0, 50));
+		panelComboBoxDate.add(labelComboBoxDate);
+		panelComboBoxDate.add(comboxDates);
+		
+		String s2[] = {"Select libellé"};
+		comboxLibelle = new JComboBox<>(s2);
+		comboxLibelle.setFont(this.controller.tahomaFont12);
+		comboxLibelle.setForeground(this.controller.colorSelect);
+		comboxLibelle.setSelectedIndex(0);
+		
+		JLabel labelComboBoxLibelle = new JLabel("Select libellé");
+		labelComboBoxLibelle.setFont(this.controller.tahomaFont12);
 
+		JPanel panelComboBoxLibelle = new JPanel();
+		panelComboBoxLibelle.add(labelComboBoxLibelle);
+		panelComboBoxLibelle.add(comboxLibelle);
+		
+		comboxLibelle.addActionListener(_ -> { onFilterChanged(); });	
 		
 		JPanel panelComboBox = new JPanel();
+		//panelComboBox.setLayout(new BoxLayout(panelComboBox, BoxLayout.Y_AXIS));
 		panelComboBox.setBorder(new EmptyBorder(0, 0, 25, 0));
-		panelComboBox.add(labelComboBox);
-		panelComboBox.add(comboxDates);
+		panelComboBox.add(panelComboBoxDate);
+		panelComboBox.add(panelComboBoxLibelle);
+
 		add(panelComboBox, BorderLayout.NORTH);
-		
-		comboxDates.addActionListener(_ -> {
-	        String selectedDate = (String) comboxDates.getSelectedItem();
-	        if ("Select date".equals(selectedDate)) {
-	            sorter.setRowFilter(null); // retire le filtre
-	        } else {
-	            sorter.setRowFilter(RowFilter.regexFilter("^" + selectedDate + "$", 0)); // colonne 2 = date
-	        }
-	    });
-		
-        
+		     
         //Ajout des infos sur le budget
         JPanel panelInfo = new JPanel();
         panelInfo.setBorder(new EmptyBorder(25, 0, 0, 0));
@@ -151,20 +163,56 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		labelBalance.setText("CHF " + String.valueOf(this.controller.getAccountSolde()));	
 		
 		// Vérifie si la date est déjà dans le combo
-     	boolean existe = false;
-     	String date = this.controller.getDate();
+		String date = this.controller.getDate();
+		comboxDates = checkCombobox(comboxDates, date);
 
-     	for (int i = 0; i < comboxDates.getItemCount(); i++) {
-     	    if (comboxDates.getItemAt(i).equals(date) || date == "") {
-     	        existe = true;
+		String libelle = this.controller.getLibelle();
+		comboxLibelle = checkCombobox(comboxLibelle, libelle);
+	}
+
+	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
+		
+		 // Vérifie si la libellé est déjà dans le combo
+     	boolean existe = false;
+
+     	for (int i = 0; i < combobox.getItemCount(); i++) {
+     	    if (combobox.getItemAt(i).equals(data) || data == "") {
+     	    	existe = true;
      	        break;
      	    }
      	}
 
      	if (!existe) {
-     		comboxDates.addItem(date);
+     		combobox.addItem(data);
      	}
+     	return combobox;
 	}
+	
+	private void onFilterChanged() {
+        String selectedDate = (String) comboxDates.getSelectedItem();
+        String selectedLabel = (String) comboxLibelle.getSelectedItem();
+
+        controller.applyFilters(selectedDate, selectedLabel);
+        updateComboBoxes(selectedDate, selectedLabel);
+    }
+
+    private void updateComboBoxes(String selectedDate, String selectedLabel) {
+        // Mise à jour du combo Libellé selon la Date sélectionnée
+    	Set<String> labels = new TreeSet<>();
+        labels = this.controller.getFilteredLibelles(selectedLabel);
+        comboxLibelle.removeAllItems();
+        comboxLibelle.addItem("Select libellé");
+        for (String label : labels) comboxLibelle.addItem(label);
+        comboxLibelle.setSelectedItem(selectedLabel);
+
+        // Mise à jour du combo Date selon le Libellé sélectionné
+        Set<String> dates = new TreeSet<>();
+        dates = this.controller.getFilteredDates(selectedDate);
+        comboxDates.removeAllItems();
+        comboxDates.addItem("Select date");
+        for (String date : dates) comboxDates.addItem(date);
+        comboxDates.setSelectedItem(selectedDate);
+    }
 }
 
 //Custom renderer for the button
@@ -200,15 +248,30 @@ class ButtonEditor extends DefaultCellEditor {
 	     
     
 	     button.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-        	   //Ajouter un message pour demander si on est sur de vouloir supprimer la ligne.
-               // Remove line in table
-        	   controller.removeRow(row);
-        	   if(parent.comboxDates.getItemCount() > 1) {
-        		   parent.comboxDates.removeItemAt(row + 1);
-        	   }
-           }
+	    	@Override
+           	public void actionPerformed(ActionEvent e) {
+        	  
+               int result = JOptionPane.showConfirmDialog(
+            	   parent,
+                   "La ligne va être supprimée. Voulez-vous continuer ?",
+                   "Confirmation",
+                   JOptionPane.YES_NO_CANCEL_OPTION,
+                   JOptionPane.QUESTION_MESSAGE
+               );
+               
+               if(result == 0) {
+            	   // Remove line in table
+            	   controller.removeRow(row);
+            	   
+            	   if(parent.comboxDates.getItemCount() > row + 1) {
+            		   parent.comboxDates.removeItemAt(row + 1);
+            	   }
+            	   
+            	   if(parent.comboxLibelle.getItemCount() > row + 1) {
+            		   parent.comboxLibelle.removeItemAt(row + 1);
+            	   }
+               }   
+	    	}
        });
 	 };
 	

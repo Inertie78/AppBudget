@@ -37,10 +37,9 @@ public class WindowMenu  extends JMenuBar{
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				try {
-					nesaop.loadRows(file, controller);
+					nesaop.loadRows(file, windowTable, controller);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null, "Erreur lors la lecture du fichier csv" + e.getMessage());
+					JOptionPane.showMessageDialog(windowTable, "Erreur lors la lecture du fichier csv" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
       	
@@ -52,11 +51,11 @@ public class WindowMenu  extends JMenuBar{
 				JFileChooser fileChooser = new JFileChooser();
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
-					nesaop.saveTableToCSV(controller, windowTable.table, file);
+					nesaop.saveTableToCSV(controller, windowTable, file);
 				}
 			}else {
 				//Message la table est vide
-				JOptionPane.showMessageDialog(null, "la table est vide");
+				JOptionPane.showMessageDialog(windowTable, "La table est vide", "Information", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
