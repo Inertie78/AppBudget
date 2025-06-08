@@ -7,6 +7,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
+import javax.swing.JOptionPane;
 
 public class WindowForms extends JPanel{
 
@@ -76,6 +77,7 @@ public class WindowForms extends JPanel{
         		clearFields();
         	}else {
         		//Rajouter message d'erreur
+        		JOptionPane.showMessageDialog(this,"Merci de renseigner toute les entrées", "Error entrée", JOptionPane.ERROR_MESSAGE);
         		clearFields();
         	}
         });
@@ -86,6 +88,7 @@ public class WindowForms extends JPanel{
 			     clearFields();
 			}else {
 				//Rajouter message d'erreur
+				JOptionPane.showMessageDialog(this,"Merci de renseigner toute les entrées", "Error entrée", JOptionPane.ERROR_MESSAGE);
 				clearFields();		
 			}
         });

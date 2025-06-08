@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Set;
 
 public class BudgetController {
 	
@@ -13,7 +14,7 @@ public class BudgetController {
 	
 	
 	public BudgetController(BudgetModel model) {
-        this.model = model;
+        this.model = model;    
     }
 	
 	public void addEntry(String libelle,  Float credit, Float debit) {
@@ -25,6 +26,18 @@ public class BudgetController {
 	    model.removeRow(index);
 	}
 	
+	 public void applyFilters(String date, String label) {
+	        model.applyFilters(date, label);
+	 }
+	 
+	public Set<String> getFilteredDates(String date) {
+	    return model.getFilteredDates(date);
+	}
+
+	public Set<String> getFilteredLibelles(String libelle) {
+	    return model.getFilteredLibelles(libelle);
+	}
+
 	public String getDay() {
         return model.getDay();
     }
@@ -75,5 +88,9 @@ public class BudgetController {
 	
 	public String getDate() {
         return model.getDate();
+    }
+	
+	public String getLibelle() {
+        return model.getLibelle();
     }
 }
