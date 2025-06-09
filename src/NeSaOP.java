@@ -10,7 +10,7 @@ public class NeSaOP {
 	public void saveTableToCSV(BudgetController controller, WindowTable windowTable, File file) {
 		try (FileWriter fw = new FileWriter(file)) {
 
-	        // Écrire les données
+	        // Écrire les données dans un fichier csv 
 	        for (int row = 0; row < controller.getRowCount(); row++) {
 	            for (int col = 0; col < controller.getColumnCount(); col++) {
 	                fw.write(String.valueOf(controller.getValueAt(row, col)));
@@ -26,6 +26,7 @@ public class NeSaOP {
 	    }
 	}
 	
+	//Ouvre un fichier csv et crée le tableau de données.
 	public void loadRows(File csvFile, WindowTable windowTable, BudgetController controller) throws IOException {
 	    try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
 	        String line;
@@ -45,8 +46,11 @@ public class NeSaOP {
                 if(isNumeric(values[2])) {credit = Float.parseFloat(values[2]);}
                 if(isNumeric(values[3])) {debit = Float.parseFloat(values[3]);}
                 
-                controller.addEntry(values[1], credit, debit);
+                controller.addEntry(values[1], credit, debit);                
 	        }
+	        
+	        JOptionPane.showMessageDialog(windowTable,"Fichier charger avec succès !", "Information", JOptionPane.INFORMATION_MESSAGE);
+	    
 	    }catch (IOException e) {
 	        JOptionPane.showMessageDialog(windowTable, "Erreur lors de l'ouvertur du fichier csv" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	    }

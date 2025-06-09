@@ -170,9 +170,9 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		comboxLibelle = checkCombobox(comboxLibelle, libelle);
 	}
 
+	// Vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
-		
-		 // Vérifie si la libellé est déjà dans le combo
+	 
      	boolean existe = false;
 
      	for (int i = 0; i < combobox.getItemCount(); i++) {
@@ -215,7 +215,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
     }
 }
 
-//Custom renderer for the button
+//Pour ajouter un bouton dans uns cellule du tableau
 class ButtonRenderer extends JButton implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
 
