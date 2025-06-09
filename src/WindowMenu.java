@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class WindowMenu  extends JMenuBar{
 	
@@ -34,6 +35,9 @@ public class WindowMenu  extends JMenuBar{
 		
 		openMenu.addActionListener((_) -> {
 			JFileChooser fileChooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter( "Fichiers csv.", "csv");
+			fileChooser.setFileFilter(filter);
+			fileChooser.setDialogTitle("Importation d'un fichier csv");
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				try {
