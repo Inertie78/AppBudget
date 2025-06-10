@@ -12,14 +12,11 @@ public class BudgetModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	private final List<Account> accountList;
-	
-	private String day, month, year;
-	
-	private Float soldeCredit, soldeDebit, solde;
-	
 	private List<Account> filteredData;
 	
-
+	private String day, month, year;
+	private Float soldeCredit, soldeDebit, solde;
+	
 	public BudgetModel() {
 		
 		this.accountList = new ArrayList<Account>();
@@ -90,6 +87,7 @@ public class BudgetModel extends AbstractTableModel {
 	
 		fireTableRowsInserted(this.filteredData.size() - 1, this.filteredData.size() - 1);
 		sumCalculation(true, this.filteredData);
+
 	}
 	
 	public void removeRow(int index) {

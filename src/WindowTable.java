@@ -62,7 +62,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
         
         // Add custom renderer and editor for the "Action" column
         refreshButtonRenderer();
-        
+
         // Ajout de la table dans un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -167,12 +167,10 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		refreshButtonRenderer();
 	}
 	
+
 	public void refreshButtonRenderer() {
 		table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
      	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
-
-	}
-
 
 	// Vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
@@ -222,25 +220,28 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 //Pour ajouter un bouton dans uns cellule du tableau
 class ButtonRenderer extends JButton implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
+  
 	private BudgetController controller;
+
 	public ButtonRenderer(BudgetController controller) {
-		this.controller = controller;
-	} 
+			this.controller = controller;
+			
+	 }
 	
 	 @Override
 	 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		 
-		   setForeground(controller.colorSelect);
-		   setOpaque(true);
-			 
-			 try {ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
-			 	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-			 	ImageIcon scaledTrash = new ImageIcon(trash);
-			 	setIcon(scaledTrash);}
-		  
-			 	catch (Exception ex) {
-		 	 System.err.println("Icone poubelle introuvable :" + ex.getMessage());}
-		  
+		setForeground(controller.colorSelect);	
+		setOpaque(true); 
+		
+		try {
+			ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
+			Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+			ImageIcon scaledTrash = new ImageIcon(trash);
+			setIcon(scaledTrash);
+		 }
+		 catch (Exception ex) {
+			 System.err.println("Icone poubelle introuvable :" + ex.getMessage());
+		 }
 		 return this;
 	 }
 }
@@ -257,11 +258,14 @@ class ButtonEditor extends DefaultCellEditor {
 	     super(checkBox);
 
 	     this.button = new JButton();
+	     this.button.setOpaque(true);
+	     
 	     this.button.setForeground(controller.colorSelect);
 	     
 	     this.button. setOpaque(true);
 	     
 	     try {ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
+
 		 	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	    	ImageIcon scaledTrash = new ImageIcon(trash);
 	     	button.setIcon(scaledTrash);
@@ -274,6 +278,8 @@ class ButtonEditor extends DefaultCellEditor {
 	     this.button.addActionListener(new ActionListener() {
 	    	@Override
            	public void actionPerformed(ActionEvent e) {
+	    		
+	    		
         	  
                int result = JOptionPane.showConfirmDialog(
             	   parent,

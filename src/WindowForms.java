@@ -99,24 +99,6 @@ public class WindowForms extends JPanel{
         add(btnDebit, gbc);
 	}
 	
-	private Boolean checkInput_old(BudgetController controller) {
-		Boolean check = false;
-		String day = controller.getDay();
-		String month = controller.getMonth();
-		String year = controller.getYear();
-		
-		for (int i = 0; i < this.fields.length - 1; i++) { 
-			String value = this.fields[i].getText();
-			if (!value.isEmpty() && day != null && month != null  && year != null) {
-				check = true;
-			}else {
-				check =  false;
-			}
-		}
-
-		return check;
-	}
-	
 	//fonction de controle que les valeurs sont renseigné
 	private Boolean checkInput(BudgetController controller) {
 		//Boolean check = false;
