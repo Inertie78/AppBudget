@@ -1,0 +1,80 @@
+import javax.swing.*;
+
+public class WindowMenu  extends JMenuBar{
+	
+	static final long serialVersionUID = 1L;
+
+	public WindowMenu(JFrame parent, BudgetModel model, BudgetController controller){
+		
+		// Créer la menu Fichier
+		JMenu fileMenu = new JMenu("File");
+		fileMenu.setFont(model.tahomaFont14);
+		
+		// Créer les items du menu Fichier
+		JMenuItem newMenu = new JMenuItem("New");
+		JMenuItem openMenu = new JMenuItem("Open");
+		JMenuItem saveMenu = new JMenuItem("Open");
+		JMenuItem quitMenu = new JMenuItem("Quit");
+
+		//Font menu add
+		newMenu.setFont(model.tahomaFont12);
+		openMenu.setFont(model.tahomaFont12);
+		saveMenu.setFont(model.tahomaFont12);
+		quitMenu.setFont(model.tahomaFont12);
+		
+		// Inscrire les événements
+		newMenu.addActionListener((_) -> {
+   	
+		});
+		
+		openMenu.addActionListener((_) -> {
+      	
+		});
+		
+		saveMenu.addActionListener((_) -> {
+      	
+		});
+		
+		quitMenu.addActionListener((_) -> {
+	        	System.exit(0);       	
+	    });
+		
+
+		// Ajouter les items au menu Fichier
+		fileMenu.add(newMenu);
+		fileMenu.add(openMenu);
+		fileMenu.add(saveMenu);
+		fileMenu.addSeparator();  // Ajouter un séparateur
+		fileMenu.add(quitMenu);
+		
+		// Ajouter le menu Fichier à la barre de menu
+		add(fileMenu);
+		
+		// Créer le menu Aide
+		JMenu helpMenu = new JMenu("Help");
+		
+		helpMenu.setFont(model.tahomaFont14);
+
+		// Créer l'item du menu Aide
+		JMenuItem aboutMenu = new JMenuItem("About");
+		
+		//Font menu add
+		aboutMenu.setFont(model.tahomaFont12);
+
+		// Inscire l'événement
+		//aboutMenu.addActionListener(parent);
+
+		// Ajouter l'item au menu Aide
+		helpMenu.add(aboutMenu);
+
+		add(Box.createHorizontalGlue());
+		
+		// Ajouter le menu Aide à la barre de menu
+		add(helpMenu);
+		
+		aboutMenu.addActionListener((_) -> {
+			String message = "<html>Création d'un budget personnel<br><br>Version de l'appilcation 1.0<br><br>Christophe et Guillaume</html>";
+			new WindowMessages(parent, model, "About", message);  	
+		});
+	}
+}
