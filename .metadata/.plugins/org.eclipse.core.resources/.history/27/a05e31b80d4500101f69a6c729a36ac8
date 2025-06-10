@@ -1,0 +1,371 @@
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
+import javax.swing.border.EmptyBorder;
+import javax.swing.RowFilter;
+import javax.swing.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+public class WindowTable extends JPanel implements PropertyChangeListener{	
+	private static final long serialVersionUID = 1L;
+	
+	public JComboBox<String> comboxDates, comboxLibelles;
+	private JLabel labelTotalCredit;
+	private JLabel labelTotalDebit;
+	private JLabel labelBalance;
+	private BudgetModel model;
+	private static JTable table;
+	private static TableRowSorter<BudgetModel> sorter;
+	private String filterDate = null;
+	private String filterLibelle = null;
+	
+	
+	
+
+	public WindowTable(BudgetModel model, BudgetController controller){
+		
+		setBorder(new EmptyBorder(50, 25, 50, 0));
+		setLayout(new BorderLayout());
+		
+		this.model = model;
+		
+		table = new JTable(this.model){
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
+		        java.awt.Component c = super.prepareRenderer(renderer, row, column);
+		        if (!isRowSelected(row)) {
+		            c.setBackground(row % 2 == 0 ? new java.awt.Color(80, 80, 80): new java.awt.Color(60, 60, 60)); // Gris clair
+		        } else {
+		            c.setBackground(getSelectionBackground());
+		        }
+		        return c;
+		    }
+		};
+		
+
+		//table.setDefaultRenderer(Object.class, new AlternatingRowRenderer());
+        table.setFont(this.model.tahomaFont12);
+	    
+	    // Centrer le texte dans les cellules
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+        	table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
+        // Add custom renderer and editor for the "Action" column
+     	table.getColumn("Action").setCellRenderer(new ButtonRenderer(model));
+     	table.getColumn("Action").setCellEditor(new ButtonEditor(this, model, new JCheckBox()));
+     	
+    	// Appliquer un rendu personnalisé sur une JTable existante
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+		                                                   boolean hasFocus, int row, int column) {
+		        Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+		        if (!isSelected) {
+		            component.setBackground(row % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE); // Alternance des couleurs
+		        } else {
+		            component.setBackground(Color.YELLOW); // Couleur pour la sélection
+		        }
+
+		        return component;
+		    }
+		});
+		
+
+		sorter = new TableRowSorter<>(this.model);
+		
+	    table.setRowSorter(sorter);
+	    sorter.addRowSorterListener(e -> tempTotals());
+     	
+        // Ajout de la table dans un JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+        
+        //ajout du module de recherche par date et libellé
+        
+		String s1[] = {"Date"};
+		comboxDates = new JComboBox<>(s1);
+		comboxDates.setFont(this.model.tahomaFont12);
+		comboxDates.setForeground(this.model.colorSelect);
+		comboxDates.setSelectedIndex(0);
+		
+		String s2[] = {"Libellé"};
+		comboxLibelles = new JComboBox<>(s2);
+		comboxLibelles.setFont(this.model.tahomaFont12);
+		comboxLibelles.setForeground(this.model.colorSelect);
+		comboxLibelles.setSelectedIndex(0);
+		
+		JLabel labelComboBox = new JLabel("Select :");
+		labelComboBox.setFont(this.model.tahomaFont12);
+		
+		JPanel panelComboBox = new JPanel();
+		panelComboBox.setBorder(new EmptyBorder(0, 0, 25, 0));
+		panelComboBox.add(labelComboBox);
+		panelComboBox.add(comboxDates);
+		panelComboBox.add(comboxLibelles);
+		add(panelComboBox, BorderLayout.NORTH);
+		
+		
+		
+		comboxDates.addActionListener(e -> {
+	        String selectedDate = (String) comboxDates.getSelectedItem();
+	        	 	
+	        if ("Date".equals(selectedDate)) {
+	           filterDate = null;
+	        	//sorter.setRowFilter(null); // retire le filtre
+	           filterCombined();
+	        } else {
+	            filterDate = selectedDate;
+	        	//sorter.setRowFilter(RowFilter.regexFilter("^" + selectedDate + "$", 0)); 
+	            filterCombined();
+	        }
+	    });
+	    
+		comboxLibelles.addActionListener(e -> {
+			String selectedLibelle = (String) comboxLibelles.getSelectedItem();
+			if ("Libellé".equals(selectedLibelle)) {
+				filterLibelle = null;
+				filterCombined();
+				//sorter.setRowFilter(null);
+			} else {
+				filterLibelle = selectedLibelle;
+				//sorter.setRowFilter(RowFilter.regexFilter("^" + selectedLibelle + "$", 1));
+				filterCombined();
+			}
+		});
+		
+		
+        
+        //Ajout des infos et les totaux sur le budget bas de la table
+        JPanel panelInfo = new JPanel();
+        panelInfo.setBorder(new EmptyBorder(25, 0, 0, 0));
+        
+        panelInfo.setLayout(new GridBagLayout());
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.insets = new Insets(10,10,10,10);
+	    
+	    gbc.gridy = 0;
+	    
+	    JLabel labelTotal = new JLabel("Total");
+        labelTotal.setFont(this.model.tahomaFont12);
+        labelTotal.setForeground(this.model.colorSelect);
+        gbc.gridx = 0;
+        panelInfo.add(labelTotal, gbc);
+        
+        labelTotalCredit = new JLabel("CHF " + "0.0");
+        labelTotalCredit.setFont(model.tahomaFont12);
+        labelTotalCredit.setForeground(model.colorSelect);
+        gbc.gridx = 2;
+        panelInfo.add(labelTotalCredit, gbc);
+        
+        labelTotalDebit = new JLabel("CHF " + "0.0");
+        labelTotalDebit.setFont(model.tahomaFont12);
+        labelTotalDebit.setForeground(model.colorSelect);
+        gbc.gridx = 3;
+        panelInfo.add(labelTotalDebit, gbc);
+
+        gbc.gridy = 1;
+        
+        JLabel labelSolde = new JLabel("Solde:");
+        labelSolde.setFont(model.tahomaFont12);
+        labelSolde.setForeground(model.colorSelect);
+        gbc.gridx = 0;
+        panelInfo.add(labelSolde, gbc);
+        
+        labelBalance = new JLabel("CHF " + "0.0");
+        labelBalance.setFont(model.tahomaFont12);
+        labelBalance.setForeground(model.colorSelect);
+        gbc.gridx = 2;
+        panelInfo.add(labelBalance, gbc);
+    
+		add(panelInfo, BorderLayout.SOUTH);
+		
+		model.addPropertyChangeListener(this);
+	}
+
+	public void filterCombined() {
+		 List<RowFilter<BudgetModel, Integer>> filtered_rows = new ArrayList<>();
+		 
+		 if (filterDate != null) {
+			 filtered_rows.add(RowFilter.regexFilter("^" + Pattern.quote(filterDate) + "$", 0));
+	
+		 }
+		 if (filterLibelle != null) {
+			 filtered_rows.add(RowFilter.regexFilter("^" + Pattern.quote(filterLibelle) + "$", 1));
+		 }
+		 if (filtered_rows.isEmpty()) {
+			 sorter.setRowFilter(null);
+		 }
+		 else if (filtered_rows.size() == 1) {
+			 sorter.setRowFilter(filtered_rows.get(0));
+			 
+		 }
+		 else {
+			 sorter.setRowFilter(RowFilter.andFilter(filtered_rows));
+		 }
+	}
+	private void tempTotals() {
+		AccountSummary summary = model.computeSummary(sorter);
+		labelTotalCredit.setText("CHF " + summary.getTotalCredit());
+		labelTotalDebit .setText("CHF " + summary.getTotalDebit());
+		
+	}
+	@Override   //Modifie les textes des JLabels en allant écouter  les changements depuis les object account
+	public void propertyChange(PropertyChangeEvent evt) {
+		
+		
+		tempTotals();  //affiche les totaux temporaires selon les lignes affichées
+		
+		labelBalance.setText("CHF " + String.valueOf(model.getAccountSolde()));	//affiche le total général selon les objects account
+		
+		// Vérifie si la date est déjà dans le combo
+     	boolean date_exists = false;
+     	boolean libelle_exists = false;
+     	
+     	String date = model.getDate();
+
+     	for (int i = 0; i < comboxDates.getItemCount(); i++) {
+     	    if (comboxDates.getItemAt(i).equals(date) || date.isEmpty()) {
+     	    	date_exists = true;
+     	        break;
+     	    }
+     	}
+
+     	if (!date_exists) {
+     		comboxDates.addItem(date);
+     	}
+     	
+     	String libel = model.getLibelle();
+     	
+     	for (int i=0 ; i < comboxLibelles.getItemCount(); i++) {
+     		if (comboxLibelles.getItemAt(i).equals(libel) || libel.isEmpty()) {
+	     		libelle_exists = true;
+	     		break;
+     		}
+     	}
+	     if (!libelle_exists) {
+	     	comboxLibelles.addItem(libel);
+     	}
+	   
+	}
+}
+
+//Custom renderer for the button
+class ButtonRenderer extends JButton implements TableCellRenderer {
+	private static final long serialVersionUID = 1L;
+
+	public ButtonRenderer(BudgetModel model) {
+
+	    
+	    setFont(model.tahomaFont12);
+	    setForeground(model.colorSelect);
+	    
+	    try {
+	    	ImageIcon trashIcon = new ImageIcon(getClass().getResource("trash_gray.png"));
+	    	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+	    	ImageIcon scaledTrash = new ImageIcon(trash);
+	    	setIcon(scaledTrash);
+     }
+	    catch (Exception e) {
+	    	System.err.println("Icone poubelle introuvable :" +e.getMessage());
+	 }
+	}
+	
+	 @Override
+	 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	     return this;
+	 }
+}
+
+//Custom editor for the button
+class ButtonEditor extends DefaultCellEditor {
+	private static final long serialVersionUID = 1L;
+	private JButton button;
+
+	 private int row;
+
+	 public ButtonEditor(WindowTable parent, BudgetModel model, JCheckBox checkBox) {
+	     super(checkBox);
+
+	     button = new JButton();
+	     button.setFont(model.tahomaFont12);
+	     button.setForeground(model.colorSelect);
+	     button.setBorderPainted(false);
+	     button.setContentAreaFilled(false);
+	     
+	    
+
+	     
+	     try {ImageIcon trashIcon = new ImageIcon(getClass().getResource("trash_gray.png"));
+		 	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+	    	ImageIcon scaledTrash = new ImageIcon(trash);
+	     	button.setIcon(scaledTrash);
+	     }
+	     catch (Exception e) {
+	    	 System.err.println("Icone poubelle introuvable :" +e.getMessage());
+	     }
+    
+	     button.addActionListener(new ActionListener() {
+           @Override //Ajoute un message pour demander si on est sur de vouloir supprimer la ligne.
+           public void actionPerformed(ActionEvent e) {
+        	   int choice = JOptionPane.showConfirmDialog(
+        	            button,
+        	            "Êtes-vous sûr de vouloir supprimer cette ligne ?",
+        	            "Confirmation de suppression",
+        	            JOptionPane.YES_NO_OPTION,
+        	            JOptionPane.WARNING_MESSAGE);
+        	   
+               // Remove line in table
+        	   if (choice == JOptionPane.YES_OPTION) {
+        		   model.removeRow(row);
+        		   if(parent.comboxDates.getItemCount() > 1) {
+        			   parent.comboxDates.removeItemAt(row + 1);
+        	   }
+        
+           }
+        	   else {
+        		   ButtonEditor.super.cancelCellEditing();
+        	   }
+        	   }
+         
+	     
+	     });
+	
+	 }
+	 
+	 @Override
+	 public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+	     this.row = row; // Store the row index
+	     
+	     return button;
+	 }
+	
+	 @Override
+	 public Object getCellEditorValue() {
+	     return "Delete";
+	 }
+}

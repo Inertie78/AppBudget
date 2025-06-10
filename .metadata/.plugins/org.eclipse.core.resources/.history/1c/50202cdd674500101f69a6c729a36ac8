@@ -1,0 +1,111 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.Writer;
+import java.io.Reader;
+
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+public class BudgetController implements ActionListener {
+	
+	private BudgetModel model;
+	private WindowMain windowMain;
+	private WindowMenu windowMenu;
+	
+	public BudgetController(BudgetModel model) {
+        this.model = model;
+    }
+	
+	public void addTransaction(String libelle,  Float credit, Float debit) {
+        // ici tu pourrais ajouter validation des données
+        model.addEntry(libelle, credit, debit);
+    }
+	
+	public void removeRow(int index) {
+	    model.removeRow(index);
+	}
+	
+	public void setDay(String value) {
+        model.setDay(value);
+    }
+	
+	public void setMonth(String value) {	
+        model.setMonth(value);
+    }
+	
+	public void setYear(String value) {
+        model.setYear(value);
+    }
+	
+	public void jsonSave(File file) {
+		try (Writer writer = new FileWriter(file)) {
+	        Gson gson = new GsonBuilder()
+	                        .setPrettyPrinting()    // pour un JSON indenté
+	                        .create();
+	        gson.toJson(model, writer);
+	    } catch (IOException ex) {
+	        ex.printStackTrace();
+	        // Afficher un message d’erreur à l’utilisateur
+		    }
+		}
+
+	
+	public void jsonOpen(File file) {
+	    try (Reader reader = new FileReader(file)) {
+	        Gson gson = new Gson();
+	        BudgetModel loaded = gson.fromJson(reader, BudgetModel.class);
+	        if (loaded != null) {
+	            // Remplace les données de l’ancien modèle
+	            model.getAccountList().clear();
+	            model.getAccountList().addAll(loaded.getAccountList());
+	            model.fireTableDataChanged();    // notifie la JTable
+	            windowMain.onModelReloaded();      // méthode à implémenter pour rafraîchir combos, totaux…
+	        }
+	    } catch (IOException ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(
+	            null,
+	            "Erreur lors de l'ouverture :\n" + ex.getMessage(),
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE
+	        );
+	    }
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    Object src = e.getSource();
+	    if (src == windowMenu.saveMenu) {
+	        JFileChooser chooser = new JFileChooser();
+	        chooser.setFileFilter(new FileNameExtensionFilter("Budget JSON (*.json)", "json"));
+	        int ret = chooser.showSaveDialog(this);
+	        if (ret == JFileChooser.APPROVE_OPTION) {
+	            File file = chooser.getSelectedFile();
+	            // assure-toi que l'extension .json est bien là
+	            if (!file.getName().toLowerCase().endsWith(".json")) {
+	                file = new File(file.getParentFile(), file.getName() + ".json");
+	            }
+	            jsonSave(file);
+	        }
+	    }
+	    else if (src == windowMenu.openMenu) {
+	        JFileChooser chooser = new JFileChooser();
+	        chooser.setFileFilter(new FileNameExtensionFilter("Budget JSON (*.json)", "json"));
+	        int ret = chooser.showOpenDialog(this);
+	        if (ret == JFileChooser.APPROVE_OPTION) {
+	            File file = chooser.getSelectedFile();
+	            jsonOpen(file);
+	        }
+	    }
+	    // … autres actions …
+	}
+
+}

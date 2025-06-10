@@ -1,0 +1,6 @@
+INDEX VERSION 1.134+C:\Users\leibzigg\Documents\CAS\Java\AppBudget\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+216992673.index
+3980440300.index
+3138329052.index
+2738132194.index

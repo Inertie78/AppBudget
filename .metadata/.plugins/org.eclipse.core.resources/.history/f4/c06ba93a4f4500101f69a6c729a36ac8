@@ -1,0 +1,246 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.*;
+
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
+
+public class BudgetModel extends AbstractTableModel {
+	
+	private PropertyChangeSupport support = new PropertyChangeSupport(this);
+
+	private static final long serialVersionUID = 1L;
+	
+	private final List<Account> accountList;
+	
+	private String day, month, year;
+	
+	private float credit, debit, soldeCredit, soldeDebit, solde;
+	
+	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
+	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
+	public final Color colorSelect = Color.cyan;
+	
+	public BudgetModel() {
+		
+		accountList = new ArrayList<Account>();
+	}
+
+	 @Override
+	 public String getColumnName(int col) {
+	    return switch (col) {
+	        case 0 -> "Date";
+	        case 1 -> "Libellé";
+	        case 2 -> "Crédit";
+	        case 3 -> "Débit";
+	        case 4 -> "Action";
+	        default -> "";
+	    };
+	 }
+	 
+	@Override
+    public Object getValueAt(int row, int col) {
+		Account account = accountList.get(row);
+		Float credit = account.getCredit();
+		Float debit = account.getDebit();
+		if(credit == 0) {
+			credit = null;
+		}else {
+			debit = null;
+		}
+        return switch (col) {
+            case 0 -> account.getDate();
+            case 1 -> account.getLibelle();
+            case 2 -> credit;
+            case 3 -> debit;
+            default -> null;
+        };
+    }
+	
+	 @Override
+	 public boolean isCellEditable(int row, int col) {
+		 return col != 0 && col != 1 && col != 2 && col != 3 ;
+	 }
+
+	@Override
+	public int getRowCount() {
+		
+		return accountList.size();
+	}
+
+	@Override
+	public int getColumnCount() {
+		
+		return 5;
+	}
+
+	public void addEntry( String libelle,  Float credit, Float debit) {
+		if(accountList.isEmpty()) {
+			soldeCredit = credit;
+			soldeDebit = debit;
+			solde = this.soldeCredit - this.soldeDebit;
+		}else {
+			Account acc = accountList.get(accountList.size() - 1);
+			soldeCredit = acc.getSoldeCredit() + credit;
+			soldeDebit = acc.getSoldeDebit() + debit;
+			solde = acc.getSolde() + (credit - debit);
+		}
+		
+		String date = day + "." + month + "." + year;
+		Account account = new Account(date, libelle, credit, debit, soldeCredit, soldeDebit, solde);
+		
+		accountList.add(account);
+		
+	    fireTableRowsInserted(accountList.size() - 1, accountList.size() - 1);
+	    
+	    Float old = this.credit;
+	    
+        this.credit = credit;
+        support.firePropertyChange("Credit", old, this.credit);
+        
+        old = this.debit;
+        this.debit = debit;
+        support.firePropertyChange("Debit", old,  this.debit);
+        
+	 }
+	
+	public void removeRow(int index) {
+	    if (index >= 0 && index < accountList.size()) {
+	    	
+	    	  	
+	    	
+	    	//suppression de la liste 
+	    	accountList.remove(index);
+	    	
+	    	//envoie informations aux vues qu'une ligne a disparue
+	    	fireTableRowsDeleted(index, index);
+	    	
+	    	//on calcule les nouveaux soldes après avoir supprimer une ligne
+	    	soldeCredit = 0f;
+	    	soldeDebit = 0f;
+	    	solde = 0f;
+	    	
+	    	for (Account acc : accountList) {
+	    		soldeCredit += acc.getCredit();
+	    		soldeDebit += acc.getDebit();
+	    		
+	    	}
+	    	solde = soldeCredit - soldeDebit;
+	    	
+	    	//on calcule les nouveaux soldes après avoir supprimer une ligne, pour que les objets "account" aient une valeure correcte
+	    	float actualCredit = 0f;
+	    	float actualDebit = 0f;
+	    	float actualSolde = 0f;
+	    	
+	    	for (Account acc : accountList) {
+	    		actualCredit += acc.getCredit();
+	    		actualDebit += acc.getDebit();
+	    		actualSolde = actualCredit - actualDebit;
+	    		acc.setSoldeCredit(actualCredit);
+	    		acc.setSoldeDebit(actualDebit);
+	    		acc.setSolde(actualSolde);
+	    	}
+	    	//on envoie les nouvelles valeurs aux listener 
+	    	support.firePropertyChange("Solde Credit", null, soldeCredit);
+	    	support.firePropertyChange("Solde Débit", null, soldeDebit);
+	    	support.firePropertyChange("Solde", null, solde);
+	    	
+	    	
+	    }
+	}
+	 
+	public void setDay(String value) {
+        day = value;
+    }
+	
+	public void setMonth(String value) {	
+        month = value;
+    }
+	
+	public void setYear(String value) {
+        year = value;
+    }
+	
+	public String getDay() {
+		return this.day;
+    }
+	
+	public String getMonth() {	
+		return this.month;
+    }
+	
+	public String getYear() {
+        return this.year;
+    }
+
+	public Float getAccountCredit(){
+        Float value = 0.0f;
+		if (!accountList.isEmpty()) {
+			Account account = accountList.get(accountList.size() - 1);
+			value =  account.getSoldeCredit();
+        }
+		return value;
+    }
+	
+	public String getDate() {
+		String date = "";
+		if (!accountList.isEmpty()) {
+			Account account = accountList.get(accountList.size() - 1);
+			date =  account.getDate();
+        }
+		return date;
+		
+	}
+	public String getLibelle() {
+		String libelle = "";
+		if (!accountList.isEmpty()) {
+			Account account = accountList.get(accountList.size() -1);
+			libelle = account.getLibelle();
+		}
+		return libelle;
+	}
+	
+	public Float getAccountDebit(){
+		Float value = 0.0f;
+		if (!accountList.isEmpty()) {
+			Account account = accountList.get(accountList.size() - 1);
+			value =  account.getSoldeDebit();
+        }
+		return value;
+    }
+    
+	public Float getAccountSolde(){
+		Float value = 0.0f;
+		if (!accountList.isEmpty()) {
+			Account ac = accountList.get(accountList.size() - 1);
+			value =  ac.getSolde();
+        }
+		return value;	
+    }
+	
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+    
+    //on communique avec la classe et les variables pour calculer les sommes temporaires des lignes affichées, mais pas le total
+    public AccountTempSums tempSum(TableRowSorter<BudgetModel> sorter) {
+        float sumCredit = 0f;
+        float sumDebit  = 0f;
+
+              
+        for (int v = 0; v < sorter.getViewRowCount(); v++) {
+            int m = sorter.convertRowIndexToModel(v);
+            Float credit = (Float) getValueAt(m, 2);
+            Float debit = (Float)getValueAt(m, 3);
+            if (credit != null) sumCredit  += credit;
+            if (debit != null) sumDebit  += debit;
+        
+            
+            
+        }
+
+        return new AccountTempSums(sumCredit, sumDebit);
+
+}}
