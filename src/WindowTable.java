@@ -61,9 +61,8 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
         }
         
         // Add custom renderer and editor for the "Action" column
-     	table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
-     	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
-
+        refreshButtonRenderer();
+        
         // Ajout de la table dans un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -164,7 +163,16 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 
 		String libelle = this.controller.getLibelle();
 		this.comboxLibelle = checkCombobox(this.comboxLibelle, libelle);
+		
+		refreshButtonRenderer();
 	}
+	
+	public void refreshButtonRenderer() {
+		table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
+     	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
+
+	}
+
 
 	// Vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
@@ -214,15 +222,26 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 //Pour ajouter un bouton dans uns cellule du tableau
 class ButtonRenderer extends JButton implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
-
+	private BudgetController controller;
 	public ButtonRenderer(BudgetController controller) {
-
-	    setForeground(controller.colorSelect);
-	 }
+		this.controller = controller;
+	} 
 	
 	 @Override
 	 public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-	     return this;
+		 
+		   setForeground(controller.colorSelect);
+		   setOpaque(true);
+			 
+			 try {ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
+			 	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+			 	ImageIcon scaledTrash = new ImageIcon(trash);
+			 	setIcon(scaledTrash);}
+		  
+			 	catch (Exception ex) {
+		 	 System.err.println("Icone poubelle introuvable :" + ex.getMessage());}
+		  
+		 return this;
 	 }
 }
 
@@ -239,6 +258,8 @@ class ButtonEditor extends DefaultCellEditor {
 
 	     this.button = new JButton();
 	     this.button.setForeground(controller.colorSelect);
+	     
+	     this.button. setOpaque(true);
 	     
 	     try {ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
 		 	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -273,7 +294,9 @@ class ButtonEditor extends DefaultCellEditor {
             	   if(parent.comboxLibelle.getItemCount() > row + 1) {
             		   parent.comboxLibelle.removeItemAt(row + 1);
             	   }
-               }   
+               } 
+               
+               fireEditingStopped();
 	    	}
        });
 	 };

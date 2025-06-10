@@ -158,7 +158,7 @@ class IntFilter extends DocumentFilter {
 
 	   private boolean check(String text) {
 	      try {
-	    	  if(text == "") {
+	    	  if(text.isEmpty()) {
 	    		  return true;
 	    	  }else {
 	    		  Float.parseFloat(text);

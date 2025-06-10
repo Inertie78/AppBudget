@@ -81,7 +81,7 @@ public class BudgetModel extends AbstractTableModel {
 	
 	    fireTableRowsInserted(this.filteredData.size() - 1, this.filteredData.size() - 1);
 	    
-	    sumcalculation(true, this.filteredData);        
+	    sumCalculation(true, this.filteredData);        
 	 }
 	
 	public void clearTable() {
@@ -89,7 +89,7 @@ public class BudgetModel extends AbstractTableModel {
 		this.filteredData = this.accountList;
 	
 		fireTableRowsInserted(this.filteredData.size() - 1, this.filteredData.size() - 1);
-		sumcalculation(true, this.filteredData);
+		sumCalculation(true, this.filteredData);
 	}
 	
 	public void removeRow(int index) {
@@ -102,7 +102,7 @@ public class BudgetModel extends AbstractTableModel {
 	    	
 	        fireTableRowsDeleted(index, index);
 	        
-	        sumcalculation(true, this.filteredData);
+	        sumCalculation(true, this.filteredData);
 	    }
 	}
 	
@@ -131,10 +131,10 @@ public class BudgetModel extends AbstractTableModel {
         
         fireTableDataChanged();
         
-        sumcalculation(false, this.filteredData);     
+        sumCalculation(false, this.filteredData);     
     }
 	
-	private void sumcalculation(Boolean boolSolde, List<Account> accList) {
+	private void sumCalculation(Boolean boolSolde, List<Account> accList) {
 		
 		Float oldSoldeCredit = this.soldeCredit;
         Float oldSoldeDebit = this.soldeDebit;
