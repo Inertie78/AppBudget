@@ -171,7 +171,8 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	public void refreshButtonRenderer() {
 		table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
      	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
-
+	}
+	
 	// Vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
 	 
