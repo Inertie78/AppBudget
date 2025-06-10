@@ -167,11 +167,10 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		refreshButtonRenderer();
 	}
 	
-	private void refreshButtonRenderer() {
-		// Add custom renderer and editor for the "Action" column
-     	table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
+
+	public void refreshButtonRenderer() {
+		table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
      	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
-	}
 
 	// Vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
@@ -221,7 +220,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 //Pour ajouter un bouton dans uns cellule du tableau
 class ButtonRenderer extends JButton implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
-	
+  
 	private BudgetController controller;
 
 	public ButtonRenderer(BudgetController controller) {
@@ -243,7 +242,6 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 		 catch (Exception ex) {
 			 System.err.println("Icone poubelle introuvable :" + ex.getMessage());
 		 }
-
 		 return this;
 	 }
 }
@@ -264,8 +262,10 @@ class ButtonEditor extends DefaultCellEditor {
 	     
 	     this.button.setForeground(controller.colorSelect);
 	     
-	     try {
-	    	ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
+	     this.button. setOpaque(true);
+	     
+	     try {ImageIcon trashIcon = new ImageIcon("assets/trash_gray.png");
+
 		 	Image trash = trashIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 	    	ImageIcon scaledTrash = new ImageIcon(trash);
 	     	button.setIcon(scaledTrash);
