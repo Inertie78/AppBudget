@@ -15,14 +15,14 @@ public class WindowMenu  extends JMenuBar{
 		String path = (String) new File("").getAbsolutePath() + "/data";
 		
 		// Créer la menu Fichier
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu("Fichier");
 		fileMenu.setFont(controller.tahomaFont14);
 		
 		// Créer les items du menu Fichier
-		JMenuItem newMenu = new JMenuItem("New");
-		JMenuItem openMenu = new JMenuItem("Open");
-		JMenuItem saveMenu = new JMenuItem("Save");
-		JMenuItem quitMenu = new JMenuItem("Quit");
+		JMenuItem newMenu = new JMenuItem("Nouveau");
+		JMenuItem openMenu = new JMenuItem("Ouvrir");
+		JMenuItem saveMenu = new JMenuItem("Sauver");
+		JMenuItem quitMenu = new JMenuItem("Quitter");
 
 		//Font menu add
 		newMenu.setFont(controller.tahomaFont12);
