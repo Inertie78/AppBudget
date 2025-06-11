@@ -39,26 +39,35 @@ Nous avons en :
 
 ### Structure du projet
 ```
-└── Personal_Budget
+└── AppBudget
     ├── .gitignore
     ├── schema.jpg
     ├── planning.png
     ├── README.md
-    ├── Application.java
-    │   └──  constructor method
-    ├── WindowPrincipal.java
-    │   ├── constructor method
-    │   └── actionPerformed method
-    ├── WindowMenu.java
-    │   └──  constructor method
-    ├── WindowTable.java
-    │   ├── constructor method
-    │   ├── AddValue method
-    │   └── RemoveValue method
+    ├── assets
+    │   └── trash.png
+    │   └── trash_gray.png
+    ├── data
+    │   └── budget_120625.csv
+    ├── Lib
+    │   └── flatlaf-3.4.jar
+    ├── src
+    │   ├── Account.java
+    │   ├── BudgetController.java
+    │   ├── BudgetModel.java
+    │   ├── DatePicker.java
+    │   ├── MainApp.java
+    │   ├── NeSaOP.java
+    │   │   ├── NewFile method
+    │   │   ├── OpenFile method
+    │   │   └── SaveFile method
+    │   ├── WindowForms.java
+    │   ├── WindowMain.java
+    │   ├── WindowMenu.java
+    │   ├── WindowMessages.java
+    │   └── WindowTable.java
     ├── WindowButton.java
-    │   └─ constructor method
-    └── OpenAndSave.java
-        ├── NewFile method
-        ├── OpenFile method
-        └── SaveFile method
+        └─ constructor method
+    
+        
 ```

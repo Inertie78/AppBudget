@@ -163,8 +163,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 
 		String libelle = this.controller.getLibelle();
 		this.comboxLibelle = checkCombobox(this.comboxLibelle, libelle);
-		
-		refreshButtonRenderer();
+
 	}
 	
 
@@ -279,9 +278,7 @@ class ButtonEditor extends DefaultCellEditor {
 	     this.button.addActionListener(new ActionListener() {
 	    	@Override
            	public void actionPerformed(ActionEvent e) {
-	    		
-	    		
-        	  
+	 
                int result = JOptionPane.showConfirmDialog(
             	   parent,
                    "La ligne va être supprimée. Voulez-vous continuer ?",

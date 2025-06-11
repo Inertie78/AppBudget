@@ -14,7 +14,7 @@ public class BudgetModel extends AbstractTableModel {
 	private final List<Account> accountList;
 	private List<Account> filteredData;
 	
-	private String day, month, year;
+	private String day, month, year, date, libelle;
 	private Float soldeCredit, soldeDebit, solde;
 	
 	public BudgetModel() {
@@ -91,20 +91,23 @@ public class BudgetModel extends AbstractTableModel {
 	}
 	
 	public void removeRow(int index) {
-	    if (index >= 0 && index < this.accountList.size()) {			
+	    if (index >= 0 && index < this.filteredData.size()) {			
 		
 			//Delete ligne du tableau et delete account de accountList
-	    	this.accountList.remove(index);
+	    	this.accountList.remove(this.filteredData.get(index));
 	    	
 	    	this.filteredData = this.accountList;
 	    	
+	    	sumCalculation(true, this.filteredData);
+	    	
 	        fireTableRowsDeleted(index, index);
 	        
-	        sumCalculation(true, this.filteredData);
+	        applyFilters(this.date, this.libelle);
 	    }
 	}
 	
 	public Set<String> getFilteredDates(String date) {
+		this.date = date;
 	    return this.filteredData.stream()
 	        .filter(row -> date == null || date.equals("Select date") || row.getDate().equals(date))
 	        .map(row -> (String) row.getDate())
@@ -113,17 +116,18 @@ public class BudgetModel extends AbstractTableModel {
 
 
 	public Set<String> getFilteredLibelles(String libelle) {
+		this.libelle = libelle;
 	    return this.filteredData.stream()
 	        .filter(row -> libelle == null || libelle.equals("Select libellé") || row.getLibelle().equals(libelle))
 	        .map(row -> (String) row.getLibelle())
 	        .collect(Collectors.toSet());
 	}
 	
-	public void applyFilters(String date, String label) {
+	public void applyFilters(String date, String libelle) {
 		this.filteredData = this.accountList.stream()
             .filter(row ->
                 (date == null || date.equals("Select date") || row.getDate().equals(date)) &&
-                (label == null || label.equals("Select libellé") || row.getLibelle().equals(label))
+                (libelle == null || libelle.equals("Select libellé") || row.getLibelle().equals(libelle))
             )
             .toList();   
         
