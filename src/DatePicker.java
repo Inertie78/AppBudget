@@ -35,7 +35,7 @@ public class DatePicker extends JPanel{
         yearComboBox.setFont(controller.tahomaFont12);
         yearComboBox.setForeground(controller.colorSelect);
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = currentYear - 50; i <= currentYear + 100; i++) {
+        for (int i = currentYear - 10; i <= currentYear + 100; i++) {
             yearComboBox.addItem(i);
         }
         

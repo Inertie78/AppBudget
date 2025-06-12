@@ -12,15 +12,17 @@ public class WindowMenu  extends JMenuBar{
 		
 		NeSaOP nesaop = new NeSaOP();
 		
+		String path = (String) new File("").getAbsolutePath() + "/data";
+		
 		// Créer la menu Fichier
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu("Fichier");
 		fileMenu.setFont(controller.tahomaFont14);
 		
 		// Créer les items du menu Fichier
-		JMenuItem newMenu = new JMenuItem("New");
-		JMenuItem openMenu = new JMenuItem("Open");
-		JMenuItem saveMenu = new JMenuItem("Save");
-		JMenuItem quitMenu = new JMenuItem("Quit");
+		JMenuItem newMenu = new JMenuItem("Nouveau");
+		JMenuItem openMenu = new JMenuItem("Ouvrir");
+		JMenuItem saveMenu = new JMenuItem("Sauver");
+		JMenuItem quitMenu = new JMenuItem("Quitter");
 
 		//Font menu add
 		newMenu.setFont(controller.tahomaFont12);
@@ -37,7 +39,9 @@ public class WindowMenu  extends JMenuBar{
 			
 			controller.clearTable();
 			
-			JFileChooser fileChooser = new JFileChooser();
+			windowTable.refreshButtonRenderer();
+			
+			JFileChooser fileChooser = new JFileChooser(path);
 			FileNameExtensionFilter filter = new FileNameExtensionFilter( "Fichiers csv.", "csv");
 			fileChooser.setFileFilter(filter);
 			fileChooser.setDialogTitle("Importation d'un fichier csv");
@@ -55,7 +59,7 @@ public class WindowMenu  extends JMenuBar{
 		saveMenu.addActionListener((e) -> {
 			
 			if (windowTable.table.getRowCount() > 0) {
-				JFileChooser fileChooser = new JFileChooser();
+				JFileChooser fileChooser = new JFileChooser(path);
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					nesaop.saveTableToCSV(controller, parent, file);

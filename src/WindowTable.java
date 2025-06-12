@@ -163,15 +163,15 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 
 		String libelle = this.controller.getLibelle();
 		this.comboxLibelle = checkCombobox(this.comboxLibelle, libelle);
-		
-		refreshButtonRenderer();
+
 	}
 	
 
 	public void refreshButtonRenderer() {
 		table.getColumn("Action").setCellRenderer(new ButtonRenderer(this.controller));
      	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
-
+	}
+	
 	// Vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
 	 
@@ -278,9 +278,7 @@ class ButtonEditor extends DefaultCellEditor {
 	     this.button.addActionListener(new ActionListener() {
 	    	@Override
            	public void actionPerformed(ActionEvent e) {
-	    		
-	    		
-        	  
+	 
                int result = JOptionPane.showConfirmDialog(
             	   parent,
                    "La ligne va être supprimée. Voulez-vous continuer ?",
