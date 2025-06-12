@@ -3,26 +3,26 @@ Application de gestion d'un budget personnel.
 
 # Cahier des charges de l'application
 
-L'application permettra à l'utilisateur de créer et de gérer un petit budget individuel, par exemple, pour le ménage ou pour des vacances. 
+L'application permet à l'utilisateur de créer et de gérer un petit budget individuel, par exemple, pour le ménage ou pour des vacances. 
 
-Il y aura un menu "File", qui aura 4 items; "New", "Open", "Save", "Quit". Ceci permettra de créer, de modifier plusieurs budgets. Le nom du budget sera afficher dans le cadre de le fenêtre de l'application. 
+Il y a un menu "File", contenant 4 items; "New", "Open", "Save", "Quit". Ceci permet de créer, de modifier plusieurs budgets. Le nom du budget est afficher dans le cadre de le fenêtre de l'application. 
 
-L'application permettra d'écrire l'objet de la saisie, par un champ de "Libellé", un champ "Montant" et un champ "Date".
+Une partie "formulaire" contient les champs "Libellé", "Montant" et "Date". Le champs date est composé de 3 menus déroulants, pour le choix du jour, du mois et de l'année.
 
-Une fois l'objet saisi, il faudra cliquer sur le bouton "Crédit" ou sur le bouton "Débit" pour enregistrer l'objet dans un fichier. 
+Une fois l'objet saisi, il faudra cliquer sur le bouton "Crédit" ou sur le bouton "Débit" pour enregistrer l'objet dans la table, située sur la partie droit de l'interface. Cette table affiche les objets saisis ainsi qu'un bouton de suppression qui peut agir sur chaque entrée au besoin.
 
-Dans la partie de droite, il y aura une table qui permettra de visualiser les objets saisis, leurs libellés, ainsi que de supprimer une entrée si on le souhaite. 
+Sur le haut de la table, se trouvent deux menus déroulants qui permettent de sélectionner ou de filtrer les dates des objets que l'on souhaite afficher. Les deux sélections se combienent, pour afiner les recherches.
 
-Au bas de la table, nous afficherons les totaux des crédits et des débits, ainsi que le solde. 
+Au bas de la table, nous affichons les totaux des crédits et des débits dynamiquement en fonction des sélections appliquées, ainsi que le solde qui lui reste global, indépendament de la sélection. 
 
-Sur le haut de la table, se trouvera un menu déroulant qui permettra de sélectionner ou de filtrer les dates des objets que l'on souhaite afficher.
+
 
 ## Planning
 
 ![Planning de l'application.](./planning.png "Planning de l'appilcation pour la gestion d'un budget personnel.")
 
 ## Structure du projet
-```
+```mardown
 └── AppBudget
     ├── .gitignore
     ├── schema.jpg
@@ -99,8 +99,8 @@ Sur le haut de la table, se trouvera un menu déroulant qui permettra de sélect
         │   └── main method
         ├── NeSaOP.java
         │   ├── NewFile method
-        │   ├── OpenFile method
-        │   └── SaveFile method
+        │   ├── SaveFile method
+        │   └── OpenFile method
         ├── WindowForms.java
         │   ├─── WindowForms class
         │   │   ├── WindowForms constructor
@@ -136,47 +136,87 @@ Sur le haut de la table, se trouvera un menu déroulant qui permettra de sélect
                 ├── ButtonEditor constructor
                 ├── getTableCellEditorComponent method
                 └── getCellEditorValue method  
+
+
 ```
 
-## Compilation de l'application
-    javac -cp ".;../Lib/flatlaf-3.4.jar" MainApp.java
-    java -cp ".;../Lib/flatlaf-3.4.jar" MainApp
 
-## Manuel d’utilisateur 
+### Compilation de l'application
+    
+    javac -cp ".;../Lib/flatlaf-3.4.jar" MainApp.java
+    java -cp ".;../Lib/flatlaf-3.4.jar" MainApp    
+
+# Manuel d’utilisateur 
 
 #### Schema de l'application
 
-    ![Schéma de l'application.](./schema.jpg "Schéma du l'appilcation pour la gestion d'un budget personnel.")
+![Schéma de l'application.](./schema.jpg "Schéma du l'appilcation pour la gestion d'un budget personnel.")
 
-    Nous avons en :
-    1) Le nom du budget 
-    2) Un menu pour créer , ouvrir, sauvegarder un budget et quitter l'appliaction
-    3) Le libellé de la transaction.
-    4) Le montant de la transaction.
-    5) La date de la transaction.
-    6) Le type de la transaction.
-    7) Tableau du budget personnel avec :\
-        7.1 les totaux des actifs et passifs plus, le solde du compte\
-        7.2 la table qui affiche les saisies\
-        7.3 le sélecteur de filtre
+Nous avons en :
+1) Le nom du budget 
+2) Un menu pour créer , ouvrir, sauvegarder un budget et quitter l'appliaction
+3) Le libellé de la transaction.
+4) Le montant de la transaction.
+5) La date de la transaction.
+6) Le type de la transaction.
+7) Tableau du budget personnel avec :\
+    7.1 les totaux des actifs et passifs plus, le solde du compte\
+    7.2 la table qui affiche les saisies\
+    7.3 le sélecteur de filtre
 
-### Amélioration de l'application
-    Ajouter dans menu un onglet sauver sous.
-    Ajouter dans le menu un onglet manuel d'utilisateur.
-    Ajouter  à l'application le manuel d'utilisateur
-    Ajouter le type de dépense exemple (loisir, nourriture, fixe, ext..)
-    Améliorer l'input montant pour interdir de commencer avec un zéro.
-    Améliorer le message d'erreurs sur les valeurs nons renseigné. Ajouter quelle champs n'est pas correcte et le mettre en surbrillance.
+## Mode d'emploi et réactions attendues
 
-### Bugs connus
-    Nous avons réussi a résoudre tout les bugs.
+### Filemenu 
+- Contient 4 onglets
+    - New : Si on veut partir sur un nouveau projet
+    - Open : Pour ouvrir un projet. Le fichier doit être un .csv. Les données spérarées par une virgule, qui doit contenir les champs suivant {xx mois yyyy, libellé,floatcrédit,floatdébit,null} dans la cellule A1->A2->etc.
+    - Save : Qui permet d'enregistrer les saisies et de créer le .csv et de l'enregistrer dans un dossier à choix de l'utilisateur
+    -Quit : Qui ferme l'application
 
-### Auto critique de notre code
-    Pas d'idée
+### Formulaire de saisie
+- Champ Libellé : Permet de saisir une courte description du motif du mouvement financier
+- Champ Montant : ne doit contenir que des chiffres. Les entiers sont transformés en float.
+- Champ Date : permet de sélectionner le jour, mois et année relatifs à la saisie
+
+- Boutons Crédit et Débit : permet d'insérer les saisies dans la table, et d'attribuer le montant à la bonne colonne. A noter qu'un message d'erreur apparait si l'un des champs Libellé-Monant-Date n'est pas rempli. Le contenu des champs Libellés et Date est vidé après l'insersion dans la table.
+
+### Table 
+- Les saisies sont inscrites dans la table par ordre de d'arrivée. 
+- Changer l'ordre d'affichage des intertions n'est pas possible
+- Les lignes sont verrouillées, la modification des insertions n'est pas possible
+- Chaque ligne contient un bouton qui permet de supprimer la saisie, au besoin 
+
+### Fonction de recherche par filtres
+
+- Chaque intertion vérifie si le champs Date et Libellé contient déjà la même entrée que la dernière saisie effectuée
+- En cliquant sur une ligne, la table actualise son affichage pour ne montrer que le contenu filté
+- Les deux filtres peuvent être utilisés simultanénement et on un impact l'un sur l'autre
+- L'affichage au bas de la page des totaux crédités et débités sont dynamique et affiche le résultat des cellules affichées
+- Le solde affiché est quand à lui le résultat du solde global, indépendament de la sélection affichée dans la table. 
 
 
-### Les difficulté renconté
-    La mise en place de la table avec ces rendues.
-    La mise en place du systèem MVC ave la table.
-    La mise en place d'un filtre dynamique croisé entre les deux combobox date et libellé.
-    La difficulté de définir les taches de chacuns (travail en commun).
+## Amélioration de l'application
+- Ajout d'un popup à l'ouverture du programme pour ouvrir ou créer un projet
+- Ajouter dans Filemenu un onglet Save as
+- Ajouter dans Helpmenu un onglet manuel d'utilisateur et donc d'ajouter un manuel à l'application
+- Ajouter le type de dépense exemple (loisir, nourriture, fixe, etc.)
+- Améliorer l'input montant pour interdir de commencer avec un zéro.
+- Améliorer les messages d'erreur sur les valeurs non-renseignées. 
+- Ajouter quels champs ne sont pas corrects et les mettre en surbrillance.
+- Empêcher de quitter sans soumettre à l'utilisateur le choix d'enregistrer ou non le projet, s'il n'as pas été enregistrer au moment de quitter
+- Un bouton d'édition de saisie pourrait être ajouter à côté du bouton de suppression
+
+## Bugs connus
+- L'enregistremenent des projets en .csv ne se fait pas en UTF-8, ce qui génère des problèmes avec les caractères avec accents.
+
+# Auto critique de notre code
+Le projet semblait simple à réaliser, puisqu'il ne contient que des fonctions basiques. Toutefois, l'implémentation des fonctions MVC, JTable et d'enregistrement de fichiers a pu être effectuée. Il y a probablement encore beaucoup d'amélioration et de simplification qui pourraient être apportées à notre code, mais compte tenu du temps à disposition et de l'expérience des développers, nous sommes satisfaits du programmes rendus.
+
+
+# Les difficultés rencontées
+- La mise en place de la table avec avec les rendus 
+- La mise en place du systèem MVC, notament avec la table
+- La mise en place d'un filtre dynamique croisé entre les deux Combobox Date et Libellé
+- La difficulté de définir les taches de chacuns (travail en commun)
+- L'utilisation de GitHub, très capricieux, qui fait perdre un temps phénoménal
+- L'utilsation d'Eclipse, qui est aussi capricieux avec les projets et qui déteste les changements qu'il n'a pas initié
