@@ -5,13 +5,13 @@ Application de gestion d'un budget personnel.
 
 L'application permet à l'utilisateur de créer et de gérer un petit budget individuel, par exemple, pour le ménage ou pour des vacances. 
 
-Il y a un menu "File", contenant 4 items; "New", "Open", "Save", "Quit". Ceci permet de créer, de modifier plusieurs budgets. Le nom du budget est afficher dans le cadre de le fenêtre de l'application. 
+Il y a un menu "Fichier", contenant 4 items; "Nouveau", "Ouvrir", "Enregistrer", "Quitter". Ceci permet de créer, de modifier plusieurs budgets. Le nom du budget est afficher dans le cadre de le fenêtre de l'application. 
 
 Une partie "formulaire" contient les champs "Libellé", "Montant" et "Date". Le champs date est composé de 3 menus déroulants, pour le choix du jour, du mois et de l'année.
 
-Une fois l'objet saisi, il faudra cliquer sur le bouton "Crédit" ou sur le bouton "Débit" pour enregistrer l'objet dans la table, située sur la partie droit de l'interface. Cette table affiche les objets saisis ainsi qu'un bouton de suppression qui peut agir sur chaque entrée au besoin.
+Une fois l'objet saisi, il faudra cliquer sur le bouton "Crédit" ou sur le bouton "Débit" pour enregistrer l'objet dans la table, située sur la partie droite de l'interface. Cette table affiche les objets saisis ainsi qu'un bouton de suppression qui peut agir sur chaque entrée au besoin.
 
-Sur le haut de la table, se trouvent deux menus déroulants qui permettent de sélectionner ou de filtrer les dates des objets que l'on souhaite afficher. Les deux sélections se combienent, pour afiner les recherches.
+Sur le haut de la table, se trouvent deux menus déroulants qui permettent de sélectionner une date ou un libellé et cette sélection filtre l'affichage dans la table. Les deux sélections se combienent, pour afiner les recherches.
 
 Au bas de la table, nous affichons les totaux des crédits et des débits dynamiquement en fonction des sélections appliquées, ainsi que le solde qui lui reste global, indépendament de la sélection. 
 
@@ -160,18 +160,18 @@ Nous avons en :
 5) La date de la transaction.
 6) Le type de la transaction.
 7) Tableau du budget personnel avec :\
-    7.1 les totaux des actifs et passifs plus, le solde du compte\
-    7.2 la table qui affiche les saisies\
-    7.3 le sélecteur de filtre
+    7.1 les totaux des actifs et passifs, ainsi que  le solde du compte\
+    7.2 la table qui affiche les saisies et les sélections\
+    7.3 les sélecteurs de filtres
 
 ## Mode d'emploi et réactions attendues
 
-### Filemenu 
+### Menu Fichier 
 - Contient 4 onglets
-    - New : Si on veut partir sur un nouveau projet
-    - Open : Pour ouvrir un projet. Le fichier doit être un .csv. Les données spérarées par une virgule, qui doit contenir les champs suivant {xx mois yyyy, libellé,floatcrédit,floatdébit,null} dans la cellule A1->A2->etc.
-    - Save : Qui permet d'enregistrer les saisies et de créer le .csv et de l'enregistrer dans un dossier à choix de l'utilisateur
-    -Quit : Qui ferme l'application
+    - Nouveau : Si on veut créer un nouveau projet
+    - Ouvrir : Pour ouvrir un projet. Le fichier doit être un .csv. Les données spérarées par une virgule, qui doit contenir les champs suivant {xx mois yyyy, libellé,floatcrédit,floatdébit,null} (laisser null à la place de floatcrédit ou floatdébit en fonction du besoin) dans la cellule A1->A2->etc.
+    - Enregistrer : Qui permet d'enregistrer les saisies, de créer le .csv et de l'enregistrer dans un dossier à choix de l'utilisateur
+    -Quitter : Qui ferme l'application
 
 ### Formulaire de saisie
 - Champ Libellé : Permet de saisir une courte description du motif du mouvement financier
@@ -181,39 +181,39 @@ Nous avons en :
 - Boutons Crédit et Débit : permet d'insérer les saisies dans la table, et d'attribuer le montant à la bonne colonne. A noter qu'un message d'erreur apparait si l'un des champs Libellé-Monant-Date n'est pas rempli. Le contenu des champs Libellés et Date est vidé après l'insersion dans la table.
 
 ### Table 
-- Les saisies sont inscrites dans la table par ordre de d'arrivée. 
-- Changer l'ordre d'affichage des intertions n'est pas possible
+- Les saisies sont inscrites dans la table par ordre d'arrivée. 
+- Changer l'ordre d'affichage des insertions n'est pas possible
 - Les lignes sont verrouillées, la modification des insertions n'est pas possible
 - Chaque ligne contient un bouton qui permet de supprimer la saisie, au besoin 
 
 ### Fonction de recherche par filtres
 
-- Chaque intertion vérifie si le champs Date et Libellé contient déjà la même entrée que la dernière saisie effectuée
-- En cliquant sur une ligne, la table actualise son affichage pour ne montrer que le contenu filté
+- A chaque insertion le script vérifie si le champs Date et Libellé contiennent déjà la même entrée. Si tel n'est pas le cas, la nouvelle date ou le nouveau libellé est ajouté respectivement dans le menu déroulant
+- En sélection une ligne dans le menu déroulant, la table actualise son affichage pour ne montrer que le contenu filtré
 - Les deux filtres peuvent être utilisés simultanénement et on un impact l'un sur l'autre
-- L'affichage au bas de la page des totaux crédités et débités sont dynamique et affiche le résultat des cellules affichées
+- L'affichage au bas de la page des totaux crédités et débités est dynamique et affiche le résultat des cellules affichées
 - Le solde affiché est quand à lui le résultat du solde global, indépendament de la sélection affichée dans la table. 
 
 
 ## Amélioration de l'application
 - Ajout d'un popup à l'ouverture du programme pour ouvrir ou créer un projet
-- Ajouter dans Filemenu un onglet Save as
-- Ajouter dans Helpmenu un onglet manuel d'utilisateur et donc d'ajouter un manuel à l'application
-- Ajouter le type de dépense exemple (loisir, nourriture, fixe, etc.)
+- Ajouter dans le Menu Fichier un onglet "Enregistrer sous"
+- Ajouter dans le Menu Help un onglet manuel d'utilisateur et donc d'ajouter un manuel à l'application
+- Ajouter un type de dépense exemple (loisir, nourriture, fixe, etc.)
 - Améliorer l'input montant pour interdir de commencer avec un zéro.
 - Améliorer les messages d'erreur sur les valeurs non-renseignées. 
 - Ajouter quels champs ne sont pas corrects et les mettre en surbrillance.
 - Empêcher de quitter sans soumettre à l'utilisateur le choix d'enregistrer ou non le projet, s'il n'as pas été enregistrer au moment de quitter
-- Un bouton d'édition de saisie pourrait être ajouter à côté du bouton de suppression
+- Ajouter Un bouton d'édition de saisie à côté du bouton de suppression
 
 ## Bugs connus
 - L'enregistremenent des projets en .csv ne se fait pas en UTF-8, ce qui génère des problèmes avec les caractères avec accents.
 
 # Auto critique de notre code
-Le projet semblait simple à réaliser, puisqu'il ne contient que des fonctions basiques. Toutefois, l'implémentation des fonctions MVC, JTable et d'enregistrement de fichiers a pu être effectuée. Il y a probablement encore beaucoup d'amélioration et de simplification qui pourraient être apportées à notre code, mais compte tenu du temps à disposition et de l'expérience des développers, nous sommes satisfaits du programmes rendus.
+Le projet semblait simple à réaliser, puisqu'il ne contient que des fonctions basiques. Toutefois, l'implémentation des fonctions MVC, JTable et d'enregistrement de fichiers s'est avérée plus compliqué que ce à quoi nous nous attendions, mais nous y sommes parvenus. Il y a probablement encore beaucoup d'amélioration et de simplification qui pourraient être apportées à notre code, mais compte tenu du temps à disposition et de l'expérience des développeurs, nous sommes satisfaits du programme rendu.
 
 
-# Les difficultés rencontées
+# Les difficultés rencontrées
 - La mise en place de la table avec avec les rendus 
 - La mise en place du systèem MVC, notament avec la table
 - La mise en place d'un filtre dynamique croisé entre les deux Combobox Date et Libellé
