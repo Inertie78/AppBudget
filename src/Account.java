@@ -1,3 +1,6 @@
+/*Classe qui va permettre de créer des objets, qui synthétisent les éléments saisis
+par l'utilisateur et qui seront introduits dans la JTable*/
+
 public class Account {
 	private String date;
 	private String libelle;
