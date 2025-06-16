@@ -209,7 +209,7 @@ Nous avons en :
 ## Bugs connus
 - L'enregistremenent des projets en .csv ne se fait pas en UTF-8, ce qui génère des problèmes avec les caractères avec accents.
 - Lorsqu'on a deux saisies qui ont le même libellé, la même date ainsi que la même valeur, soit dans Crédit soit dans Débit et que l'on souhaite supprimer cette entrée, nous ne savons pas comment se comporte l'application, à savoir si les deux entrées sont supprimées ou se seule l'une des deux l'est et laquelle.
-- Nous n'avons pas mis de limite de taille au tableau ni à la liste des transactions.
+- Nous n'avons pas mis de limite de taille à la liste des transactions.
 - Sur l'entrée montant il faudrait interdire de commencer par un zéro.
 
 # Auto critique de notre code
