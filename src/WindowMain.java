@@ -16,27 +16,29 @@ public class WindowMain extends JFrame{
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		//Instancier les classes
 		BudgetModel model = new BudgetModel();
 		BudgetController controller = new BudgetController(model);
 		
-		 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 
-		 // Taille et positon de la fenêtre principale
+		// Taille et positon de la fenêtre principale
 		setBounds(50, 100, width, height);
 		
 		JPanel contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(0, 50, 0, 50));
 		
+		//Instancie un formulaire et l'ajoute au panneau
 		contentPanel.add(new WindowForms(controller), BorderLayout.WEST);
 		
-		// add une table
+		// ajout d'une table au panneau
 		WindowTable windowTable = new WindowTable(model, controller);
 		contentPanel.add(windowTable, BorderLayout.CENTER);
 		
+		// Ajouter le panneau avec le formulaire et la table à la fenêtre
 		setContentPane(contentPanel);
 		
-		// Ajouter la barre de menus à la fenêtre
+		//Instancie un menu et l'ajoute à la page
 		setJMenuBar(new WindowMenu(this, windowTable, controller));
 		
 		 pack();
@@ -47,7 +49,6 @@ public class WindowMain extends JFrame{
 	    dispose(); // ferme la fenêtre actuelle
 	    SwingUtilities.invokeLater(() -> {
 	    	WindowMain nouvelleFenetre = new WindowMain ("Application de gestion d'un budget personnel", 1200, 600);
-
 	        nouvelleFenetre.setVisible(true);
 	    });
 	}

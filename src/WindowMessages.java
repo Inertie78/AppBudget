@@ -7,8 +7,7 @@ public class WindowMessages extends JDialog{
 	private static final long serialVersionUID = 1L;
 	
 	public WindowMessages(JFrame parent, BudgetController controller, String title, String texte){
-		// true --> dialogue modal
-		
+
 		super(parent, title, true);
 		
 		JPanel contentPane = new JPanel();
@@ -28,7 +27,8 @@ public class WindowMessages extends JDialog{
 		contentPane.add(labelPane);
 		
 		JPanel boutonPane = new JPanel();
-		// Créer le bouton
+		
+		// Créer le bouton pour fermer la fenêtre
 		JButton boutonOk = new JButton("Ok");
 		boutonOk.setFont(controller.tahomaFont12);
 		boutonOk.addActionListener((e) -> {
@@ -43,7 +43,7 @@ public class WindowMessages extends JDialog{
 		
 		add(contentPane);
 
-		//Initialize this dialog to its preferred size.
+		//Initialisez cette boîte de dialogue à sa taille préférée
 		pack();
 		
 		// Position du parent à l'écran

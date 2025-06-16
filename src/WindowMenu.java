@@ -24,17 +24,18 @@ public class WindowMenu  extends JMenuBar{
 		JMenuItem saveMenu = new JMenuItem("Sauver");
 		JMenuItem quitMenu = new JMenuItem("Quitter");
 
-		//Font menu add
+		//Police personnalisée
 		newMenu.setFont(controller.tahomaFont12);
 		openMenu.setFont(controller.tahomaFont12);
 		saveMenu.setFont(controller.tahomaFont12);
 		quitMenu.setFont(controller.tahomaFont12);
 		
-		// Inscrire les événements
+		//Inscrire l'événement nouveau
 		newMenu.addActionListener((e) -> {
 			parent.restartUI();
 		});
 		
+		//Inscrire l'événement ouvrir
 		openMenu.addActionListener((e) -> {
 			
 			controller.clearTable();
@@ -56,6 +57,7 @@ public class WindowMenu  extends JMenuBar{
       	
 		});
 		
+		// Inscrire l'événement sauver
 		saveMenu.addActionListener((e) -> {
 			
 			if (windowTable.table.getRowCount() > 0) {
@@ -70,6 +72,8 @@ public class WindowMenu  extends JMenuBar{
 			}
 		});
 		
+		
+		// Inscrire l'événement quitter
 		quitMenu.addActionListener((e) -> {
 	        	System.exit(0);       	
 	    });
@@ -88,12 +92,13 @@ public class WindowMenu  extends JMenuBar{
 		// Créer le menu Aide
 		JMenu helpMenu = new JMenu("Help");
 		
+		//Police personnalisée
 		helpMenu.setFont(controller.tahomaFont14);
 
 		// Créer l'item du menu Aide
 		JMenuItem aboutMenu = new JMenuItem("About");
 		
-		//Font menu add
+		//Police personnalisée
 		aboutMenu.setFont(controller.tahomaFont12);
 
 		// Ajouter l'item au menu Aide

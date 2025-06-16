@@ -17,8 +17,8 @@ public class BudgetController {
         this.model = model;    
     }
 	
+	//Pour entré les données de la table à model
 	public void addEntry(String libelle,  Float credit, Float debit) {
-        // ici tu pourrais ajouter validation des données
         model.addEntry(libelle, credit, debit);
     }
 	

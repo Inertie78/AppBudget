@@ -28,6 +28,7 @@ public class WindowForms extends JPanel{
 	    gbc.insets = new Insets(10,10,10,10);
 	    gbc.anchor = GridBagConstraints.WEST;
 		
+	    //Positionne les éléments du formulaire sur le panneau
 		for (int i = 0; i < this.labels.length; i++) {
             gbc.gridx = 0;
             gbc.gridy = i;
@@ -66,11 +67,11 @@ public class WindowForms extends JPanel{
         JButton btnCredit = new JButton("Crédit");
         JButton btnDebit = new JButton("Débit");
         
-        //Font menu add
+        //Police des butons
         btnCredit.setFont(controller.tahomaFont12);
         btnDebit.setFont(controller.tahomaFont12);
 
-        // Inscrire les événements+
+        // Inscrire l'événement credit
         btnCredit.addActionListener(e -> {
         	if(checkInput(controller)) {
         		controller.addEntry((String) this.fields[0].getText(), Float.parseFloat(this.fields[1].getText()), 0.0f);
@@ -82,6 +83,7 @@ public class WindowForms extends JPanel{
         	}
         });
 
+        // Inscrire l'événement debit
         btnDebit.addActionListener(e -> {
 			if(checkInput(controller)) {
 			     controller.addEntry((String) this.fields[0].getText(), 0.0f, Float.parseFloat(this.fields[1].getText()));
@@ -114,7 +116,8 @@ public class WindowForms extends JPanel{
 		
 		return day != null && month != null && year != null;
 	}
-
+	
+	//Vide les entrées du formulaire
 	private void clearFields() {
 		for (int i = 0; i < this.fields.length-1; i++) {this.fields[i].setText("");}
 	}

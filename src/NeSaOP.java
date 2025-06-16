@@ -56,6 +56,7 @@ public class NeSaOP {
 	    }
 	}
 	
+	//Controle si le paramètre de la fonction est numérique
 	public static boolean isNumeric(String str) {
         try {
         	Float.parseFloat(str);

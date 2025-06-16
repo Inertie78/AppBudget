@@ -19,7 +19,9 @@ public class BudgetModel extends AbstractTableModel {
 	
 	public BudgetModel() {
 		
+		//Crée une liste de transactions
 		this.accountList = new ArrayList<Account>();
+		//Une copie avec filtre de accountlist
 		this.filteredData = new ArrayList<Account>();
 	}
 
@@ -69,18 +71,22 @@ public class BudgetModel extends AbstractTableModel {
 		return 5;
 	}
 
+	//Crée une nouvelle transaction et l'ajoute à la liste des transactions
 	public void addEntry( String libelle,  Float credit, Float debit) {		
 		String date = day + " " + month + " " + year;
 		Account account = new Account(date, libelle, credit, debit);
 		
 		this.accountList.add(account);
 		this.filteredData = this.accountList;
-	
+		
+		//Mets à jour la table
 	    fireTableRowsInserted(this.filteredData.size() - 1, this.filteredData.size() - 1);
 	    
+	    //Calcule les soldes de la table
 	    sumCalculation(true, this.filteredData);        
 	 }
 	
+	//Vide la table
 	public void clearTable() {
 		this.accountList.clear();
 		this.filteredData = this.accountList;
@@ -90,6 +96,7 @@ public class BudgetModel extends AbstractTableModel {
 
 	}
 	
+	//Supprime une ligne de la table
 	public void removeRow(int index) {
 	    if (index >= 0 && index < this.filteredData.size()) {			
 		
@@ -106,6 +113,7 @@ public class BudgetModel extends AbstractTableModel {
 	    }
 	}
 	
+	//Filtre sur les dates
 	public Set<String> getFilteredDates(String date) {
 		this.date = date;
 	    return this.filteredData.stream()
@@ -114,7 +122,7 @@ public class BudgetModel extends AbstractTableModel {
 	        .collect(Collectors.toSet());
 	}
 
-
+	//Filtre sur le libellé
 	public Set<String> getFilteredLibelles(String libelle) {
 		this.libelle = libelle;
 	    return this.filteredData.stream()
@@ -123,6 +131,7 @@ public class BudgetModel extends AbstractTableModel {
 	        .collect(Collectors.toSet());
 	}
 	
+	// Applique les filtres séléctionnés
 	public void applyFilters(String date, String libelle) {
 		this.filteredData = this.accountList.stream()
             .filter(row ->
@@ -131,11 +140,14 @@ public class BudgetModel extends AbstractTableModel {
             )
             .toList();   
         
+		//Mets à jour la table
         fireTableDataChanged();
         
+        //Calcule les soldes de la table
         sumCalculation(false, this.filteredData);     
     }
 	
+	 //Calcule soldes
 	private void sumCalculation(Boolean boolSolde, List<Account> accList) {
 		
 		Float oldSoldeCredit = this.soldeCredit;
