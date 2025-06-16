@@ -208,6 +208,7 @@ Nous avons en :
 
 ## Bugs connus
 - L'enregistremenent des projets en .csv ne se fait pas en UTF-8, ce qui génère des problèmes avec les caractères avec accents.
+- Lorsqu'on a deux saisies qui ont le même libellé, la même date ainsi que la même valeur, soit dans Crédit soit dans Débit et que l'on souhaite supprimer cette entrée, nous ne savons pas comment se comporte l'application, à savoir si les deux entrées sont supprimées ou se seule l'une des deux l'est et laquelle.
 
 # Auto critique de notre code
 Le projet semblait simple à réaliser, puisqu'il ne contient que des fonctions basiques. Toutefois, l'implémentation des fonctions MVC, JTable et d'enregistrement de fichiers s'est avérée plus compliqué que ce à quoi nous nous attendions, mais nous y sommes parvenus. Il y a probablement encore beaucoup d'amélioration et de simplification qui pourraient être apportées à notre code, mais compte tenu du temps à disposition et de l'expérience des développeurs, nous sommes satisfaits du programme rendu.

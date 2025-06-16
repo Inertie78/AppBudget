@@ -5,7 +5,7 @@ import java.util.Set;
 public class BudgetController {
 	
 	private BudgetModel model;
-	
+	//définition de l'apparence qui sera reprise par 
 	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
 	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
 	public final Color colorSelect = Color.cyan;
