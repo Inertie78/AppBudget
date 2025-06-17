@@ -38,7 +38,7 @@ public class BudgetModel extends AbstractTableModel {
 	    };
 	 }
 	 
-	 //fonction pour la récéption des valeurs selon la saisie utilisateur dans le champs montant
+	//fonction pour la récéption des valeurs selon la saisie utilisateur dans le champs montant
 	@Override
     public Object getValueAt(int row, int col) {
 		Account account = this.filteredData.get(row);
