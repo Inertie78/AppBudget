@@ -4,7 +4,7 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class WindowMenu  extends JMenuBar{
+public class WindowMenu  extends JMenuBar{                                  //classe qui crée la barre des menus et titre
 	
 	static final long serialVersionUID = 1L;
 

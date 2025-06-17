@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
-public class NeSaOP {
+public class NeSaOP {                                   //Classe pour New, Save, Open
 	
 	public void saveTableToCSV(BudgetController controller, WindowMain windowMain, File file) {
 		try (FileWriter fw = new FileWriter(file)) {
@@ -31,10 +31,10 @@ public class NeSaOP {
 	    try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
 	        String line;
 	        while ((line = reader.readLine()) != null) {
-	            String[] values = line.split(",", -1); // -1 to include empty values
+	            String[] values = line.split(",", -1); 
 	            
                 String trav = values[0];
-                String[] date = trav.split(" ", -2); // -1 to include empty values
+                String[] date = trav.split(" ", -2); 
               
                 controller.setDay((String) date[0]);
                 controller.setMonth((String) date[1]);
