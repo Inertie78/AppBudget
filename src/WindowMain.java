@@ -3,7 +3,8 @@ import java.awt.*;
 
 import javax.swing.border.EmptyBorder;
 
-public class WindowMain extends JFrame{                                 //classe de mise en place de la fenêtre principale
+//classe de mise en place de la fenêtre principale
+public class WindowMain extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	

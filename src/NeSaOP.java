@@ -5,7 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
-public class NeSaOP {                                   //Classe pour New, Save, Open
+//Classe pour New, Save, Open
+public class NeSaOP {
 	
 	public void saveTableToCSV(BudgetController controller, WindowMain windowMain, File file) {
 		try (FileWriter fw = new FileWriter(file)) {

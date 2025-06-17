@@ -9,7 +9,8 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 import javax.swing.JOptionPane;
 
-public class WindowForms extends JPanel{                             //classe pour créer la partie formulaire de saisie pour l'utilisateur 
+//classe pour créer la partie formulaire de saisie pour l'utilisateur 
+public class WindowForms extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	

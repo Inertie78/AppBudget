@@ -5,7 +5,8 @@ import java.util.Calendar;
 
 import javax.swing.JComboBox;
 
-public class DatePicker extends JPanel{                                     //fonction qui permet d'afficher les menus déroulants pour le choix du jour, mois, année
+//fonction qui permet d'afficher les menus déroulants pour le choix du jour, mois, année
+public class DatePicker extends JPanel{
 
 	private static final long serialVersionUID = 1L;              
 

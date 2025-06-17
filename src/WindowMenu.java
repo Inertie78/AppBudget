@@ -4,7 +4,8 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class WindowMenu  extends JMenuBar{                                  //classe qui crée la barre des menus et titre
+//classe qui crée la barre des menus et titre
+public class WindowMenu  extends JMenuBar{
 	
 	static final long serialVersionUID = 1L;
 
@@ -83,7 +84,8 @@ public class WindowMenu  extends JMenuBar{                                  //cl
 		fileMenu.add(newMenu);
 		fileMenu.add(openMenu);
 		fileMenu.add(saveMenu);
-		fileMenu.addSeparator();  // Ajouter un séparateur
+		// Ajouter un séparateur
+		fileMenu.addSeparator(); 
 		fileMenu.add(quitMenu);
 		
 		// Ajouter le menu Fichier à la barre de menu
