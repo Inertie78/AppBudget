@@ -154,7 +154,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
+		
 		
 		this.labelTotalCredit.setText("CHF " + String.valueOf(this.controller.getSoldeCredit()));
 		this.labelTotalDebit.setText("CHF " + String.valueOf(this.controller.getSoldeDebit()));

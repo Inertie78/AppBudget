@@ -9,7 +9,7 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 import javax.swing.JOptionPane;
 
-public class WindowForms extends JPanel{
+public class WindowForms extends JPanel{                             //classe pour créer la partie formulaire de saisie pour l'utilisateur 
 
 	private static final long serialVersionUID = 1L;
 	
@@ -21,7 +21,7 @@ public class WindowForms extends JPanel{
 	
 		String[] values = {"", ""};
 		
-		setFont(controller.tahomaFont12);
+		setFont(controller.tahomaFont12);                           
 		setBorder(new EmptyBorder(0, 0, 0, 25));
 		setLayout(new GridBagLayout());
 	    GridBagConstraints gbc = new GridBagConstraints();
@@ -83,7 +83,7 @@ public class WindowForms extends JPanel{
         	}
         });
 
-        // Inscrire l'événement debit
+        // Inscrire l'événement débit
         btnDebit.addActionListener(e -> {
 			if(checkInput(controller)) {
 			     controller.addEntry((String) this.fields[0].getText(), 0.0f, Float.parseFloat(this.fields[1].getText()));
@@ -101,7 +101,7 @@ public class WindowForms extends JPanel{
         add(btnDebit, gbc);
 	}
 	
-	//fonction de controle que les valeurs sont renseigné
+	//fonction qui contrôle que les valeurs sont renseignées
 	private Boolean checkInput(BudgetController controller) {
 		//Boolean check = false;
 		String day = controller.getDay();
@@ -123,7 +123,7 @@ public class WindowForms extends JPanel{
 	}
 }
 
-//Classe pour filtrer que les entiers positifs. 
+//Classe pour filtrer les entiers positifs. 
 class IntFilter extends DocumentFilter {
 	   @Override
 	   public void insertString(FilterBypass fb, int offset, String string,
@@ -137,7 +137,7 @@ class IntFilter extends DocumentFilter {
 	      if (check(sb.toString())) {
 	         super.insertString(fb, offset, string, attr);
 	      } else {
-	         // warn the user and don't allow the insert
+	         
 	      }
 	   }
 
@@ -167,7 +167,7 @@ class IntFilter extends DocumentFilter {
 	      if (check(sb.toString())) {
 	         super.replace(fb, offset, length, text, attrs);
 	      } else {
-	         // warn the user and don't allow the insert
+	         
 	      }
 
 	   }

@@ -11,20 +11,18 @@ public class BudgetModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final List<Account> accountList;
+	private final List<Account> accountList;        //déclaration des listes d'account
 	private List<Account> filteredData;
 	
-	private String day, month, year, date, libelle;
-	private Float soldeCredit, soldeDebit, solde;
+	private String day, month, year, date, libelle;  //déclaration des variables String qui seront utilisées dans la classe
+	private Float soldeCredit, soldeDebit, solde;    //déclaration des variables float qui seront utilisées dans la classe 
 	
 	public BudgetModel() {
 		
-		//Crée une liste de transactions
 		this.accountList = new ArrayList<Account>();
-		//Une copie avec filtre de accountlist
 		this.filteredData = new ArrayList<Account>();
 	}
-
+     // crée la JTable en donnant un nom au colonnes 
 	 @Override
 	 public String getColumnName(int col) {
 	    return switch (col) {
@@ -36,7 +34,8 @@ public class BudgetModel extends AbstractTableModel {
 	        default -> "";
 	    };
 	 }
-	 
+	 //fonction pour la récéption des valeurs selon la saisie utilisateur dans le champs montant
+	 // Elle permet de renseigner le bon champs en retournant via switch les valeurs dans l'objet account
 	@Override
     public Object getValueAt(int row, int col) {
 		Account account = this.filteredData.get(row);
@@ -55,55 +54,50 @@ public class BudgetModel extends AbstractTableModel {
     }
 	
 	 @Override
-	 public boolean isCellEditable(int row, int col) {
+	 public boolean isCellEditable(int row, int col) {            //empêche l'édition des lignes saisies dans la JTable
 		 return col != 0 && col != 1 && col != 2 && col != 3 ;
 	 }
 
 	@Override
-	public int getRowCount() {
-		// TODO Auto-generated method stub
+	public int getRowCount() {                                    //retourne le nombre de cellule addichée  
+		
 		return filteredData.size();
 	}
 
 	@Override
-	public int getColumnCount() {
-		// TODO Auto-generated method stub
+	public int getColumnCount() {                                //retourne 5 pour définir le nombre de colonne (qui est fixe)
+		
 		return 5;
 	}
 
-	//Crée une nouvelle transaction et l'ajoute à la liste des transactions
-	public void addEntry( String libelle,  Float credit, Float debit) {		
+	public void addEntry( String libelle,  Float credit, Float debit) {		//ajoute une ligne dans la JTable et notifie la nouvelle ligne via une des fontions "fireTable"
 		String date = day + " " + month + " " + year;
 		Account account = new Account(date, libelle, credit, debit);
 		
 		this.accountList.add(account);
 		this.filteredData = this.accountList;
-		
-		//Mets à jour la table
+	
 	    fireTableRowsInserted(this.filteredData.size() - 1, this.filteredData.size() - 1);
 	    
-	    //Calcule les soldes de la table
 	    sumCalculation(true, this.filteredData);        
 	 }
 	
-	//Vide la table
 	public void clearTable() {
-		this.accountList.clear();
+		this.accountList.clear();                                            //permet de supprimer les lignes de la Table
 		this.filteredData = this.accountList;
 	
 		fireTableRowsInserted(this.filteredData.size() - 1, this.filteredData.size() - 1);
-		sumCalculation(true, this.filteredData);
+		sumCalculation(true, this.filteredData);                  //passe la fonction d'addition, sans mettre à jour le solde total
 
 	}
 	
-	//Supprime une ligne de la table
 	public void removeRow(int index) {
 	    if (index >= 0 && index < this.filteredData.size()) {			
 		
-			//Delete ligne du tableau et delete account de accountList
-	    	this.accountList.remove(this.filteredData.get(index));
+			                                                                  
+	    	this.accountList.remove(this.filteredData.get(index));         //Supprime une  ligne du tableau et supprime un account de accountList et informe des changements
 	    	
-	    	this.filteredData = this.accountList;
+	    	this.filteredData = this.accountList;                         
 	    	
 	    	sumCalculation(true, this.filteredData);
 	    	
@@ -113,8 +107,7 @@ public class BudgetModel extends AbstractTableModel {
 	    }
 	}
 	
-	//Filtre sur les dates
-	public Set<String> getFilteredDates(String date) {
+	public Set<String> getFilteredDates(String date) {                    //fonction qui filte les lignes de la Table en fonction du Combobox des dates
 		this.date = date;
 	    return this.filteredData.stream()
 	        .filter(row -> date == null || date.equals("Select date") || row.getDate().equals(date))
@@ -122,8 +115,8 @@ public class BudgetModel extends AbstractTableModel {
 	        .collect(Collectors.toSet());
 	}
 
-	//Filtre sur le libellé
-	public Set<String> getFilteredLibelles(String libelle) {
+
+	public Set<String> getFilteredLibelles(String libelle) {              //fonction qui filte les lignes de la Table en fonction du Combobox des Libellés
 		this.libelle = libelle;
 	    return this.filteredData.stream()
 	        .filter(row -> libelle == null || libelle.equals("Select libellé") || row.getLibelle().equals(libelle))
@@ -131,9 +124,8 @@ public class BudgetModel extends AbstractTableModel {
 	        .collect(Collectors.toSet());
 	}
 	
-	// Applique les filtres séléctionnés
-	public void applyFilters(String date, String libelle) {
-		this.filteredData = this.accountList.stream()
+	public void applyFilters(String date, String libelle) {             //applique le filtre et crée un objet account qui contient le résultat des filtres 
+		this.filteredData = this.accountList.stream()                   //fait la somme des totaux crédits et débits du nouvel objet et transmet le changement 
             .filter(row ->
                 (date == null || date.equals("Select date") || row.getDate().equals(date)) &&
                 (libelle == null || libelle.equals("Select libellé") || row.getLibelle().equals(libelle))
@@ -158,12 +150,12 @@ public class BudgetModel extends AbstractTableModel {
         soldeCredit = 0.0f;
     	soldeDebit = 0.0f;
  
-        for (Account account : accList) {
-        	this.soldeCredit += account.getCredit();
-        	this.soldeDebit += account.getDebit();	
+        for (Account account : accList) {                             // Fonction de calcul des sommes de l'objet account
+        	this.soldeCredit += account.getCredit();                  // ajoute pour chaque ligne affichée le montant crédit de la ligne et en fait une nouvelle variable
+        	this.soldeDebit += account.getDebit();	                  // ajoute pour chaque ligne affichée le montant débit de la ligne et en fait une nouvelle variable
         }
         
-        if(boolSolde) {
+        if(boolSolde) {                                               //le solde n'est mis à jour que si le contenu de la table n'est pas filté
         	
         	this.solde = this.soldeCredit - this.soldeDebit;
         	this.support.firePropertyChange("Solde", oldSolde, this.solde);
@@ -174,7 +166,7 @@ public class BudgetModel extends AbstractTableModel {
 		
 	}
 	
-	public Float getSoldeCredit() {
+	public Float getSoldeCredit() {                                   //série de fonction qui servent à retourner ou à modifier les valeurs des variables voulues
         return this.soldeCredit;
     }
 	
@@ -228,7 +220,7 @@ public class BudgetModel extends AbstractTableModel {
 		return libelle;
 	}
 	
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        this.support.addPropertyChangeListener(listener);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {       //fonction qui va permettre d'enregistrer des listener à qui les firePropertyChange 
+        this.support.addPropertyChangeListener(listener);                          //vont être envoyés
     }
 }
