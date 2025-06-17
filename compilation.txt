@@ -1,4 +1,0 @@
-javac -cp ".;../Lib/flatlaf-3.4.jar" Application.java
-
-java -cp ".;../Lib/flatlaf-3.4.jar" Application
-
