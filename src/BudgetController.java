@@ -5,20 +5,20 @@ import java.util.Set;
 public class BudgetController {
 	
 	private BudgetModel model;
-	//définition de l'apparence qui sera reprise par 
+	//définition de l'apparence qui sera reprise par différents composants du programme 
 	public final Font tahomaFont12 = new Font("Tahoma", Font.PLAIN, 12);
 	public final Font tahomaFont14 = new Font("Tahoma", Font.PLAIN, 14);
 	public final Color colorSelect = Color.cyan;
 	public final Color colorColumn_01 = new java.awt.Color(80, 80, 80);
 	public final Color colorColumn_02 = new java.awt.Color(60, 60, 60);
 	
-	
+	//Les différentes fonctions qui suivent servent à faire l'interraction avec la classe modèle
 	public BudgetController(BudgetModel model) {
         this.model = model;    
     }
 	
-	//Pour entré les données de la table à model
 	public void addEntry(String libelle,  Float credit, Float debit) {
+    
         model.addEntry(libelle, credit, debit);
     }
 	
