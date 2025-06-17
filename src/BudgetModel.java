@@ -21,10 +21,10 @@ public class BudgetModel extends AbstractTableModel {
 	private Float soldeCredit, soldeDebit, solde;    
 	
 	public BudgetModel() {
-		
 		this.accountList = new ArrayList<Account>();
 		this.filteredData = new ArrayList<Account>();
 	}
+	
      // crée la JTable en donnant un nom au colonnes 
 	 @Override
 	 public String getColumnName(int col) {

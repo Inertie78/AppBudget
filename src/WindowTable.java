@@ -33,9 +33,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		
 		//Crée l'objet table
 		table = new JTable(model){
-		    /**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 1L;
 
 			//Pour alterner  les couleurs des lignes 
