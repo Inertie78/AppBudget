@@ -25,7 +25,7 @@ public class BudgetModel extends AbstractTableModel {
 		this.filteredData = new ArrayList<Account>();
 	}
 	
-     // crée la JTable en donnant un nom au colonnes 
+     //crée la JTable en donnant un nom au colonnes 
 	 @Override
 	 public String getColumnName(int col) {
 	    return switch (col) {
@@ -102,7 +102,7 @@ public class BudgetModel extends AbstractTableModel {
 	
 	public void removeRow(int index) {
 	    if (index >= 0 && index < this.filteredData.size()) {			
-	    	//Supprime une  ligne du tableau et supprime un account de accountList et informe des changements            
+	    	//supprime une  ligne du tableau et supprime un account de accountList et informe des changements            
 	    	this.accountList.remove(this.filteredData.get(index));
 	    	
 	    	this.filteredData = this.accountList;                         
@@ -133,8 +133,8 @@ public class BudgetModel extends AbstractTableModel {
 	        .collect(Collectors.toSet());
 	}
 	
-	//Applique le filtre et crée un objet account qui contient le résultat des filtres 
-	//Fait la somme des totaux crédits et débits du nouvel objet et transmet le changement
+	//applique le filtre et crée un objet account qui contient le résultat des filtres 
+	//fait la somme des totaux crédits et débits du nouvel objet et transmet le changement
 	public void applyFilters(String date, String libelle) {
 		this.filteredData = this.accountList.stream() 	
             .filter(row ->
@@ -143,14 +143,14 @@ public class BudgetModel extends AbstractTableModel {
             )
             .toList();   
         
-		//Mets à jour la table
+		//mets à jour la table
         fireTableDataChanged();
         
-        //Calcule les soldes de la table
+        //calcule les soldes de la table
         sumCalculation(false, this.filteredData);     
     }
 	
-	 //Calcule soldes
+	 //calcule soldes
 	private void sumCalculation(Boolean boolSolde, List<Account> accList) {
 		
 		Float oldSoldeCredit = this.soldeCredit;
@@ -161,11 +161,11 @@ public class BudgetModel extends AbstractTableModel {
         soldeCredit = 0.0f;
     	soldeDebit = 0.0f;
  
-    	// boucle de calcul des sommes de l'objet account
+    	//boucle de calcul des sommes de l'objet account
         for (Account account : accList) {
-        	// ajoute pour chaque ligne affichée le montant crédit de la ligne
+        	//ajoute pour chaque ligne affichée le montant crédit de la ligne
         	this.soldeCredit += account.getCredit();
-        	// ajoute pour chaque ligne affichée le montant débit de la ligne
+        	//ajoute pour chaque ligne affichée le montant débit de la ligne
         	this.soldeDebit += account.getDebit();
         }
         
@@ -237,8 +237,8 @@ public class BudgetModel extends AbstractTableModel {
 		return libelle;
 	}
 	
-	//Fonction qui va permettre d'enregistrer des listener à qui les firePropertyChange 
-	//Vont être envoyés
+	//fonction qui va permettre d'enregistrer des listener à qui les firePropertyChange 
+	//vont être envoyés
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.support.addPropertyChangeListener(listener);                          
     }

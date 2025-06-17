@@ -17,7 +17,7 @@ public class WindowMessages extends JDialog{
 		
 		JPanel labelPane = new JPanel();
 
-		// Créer le label pour le texte
+		//créer le label pour le texte
 		JLabel label = new JLabel(texte, JLabel.CENTER);
 		label.setFont(controller.tahomaFont12);
 		labelPane.add(label);
@@ -28,7 +28,7 @@ public class WindowMessages extends JDialog{
 		
 		JPanel boutonPane = new JPanel();
 		
-		// Créer le bouton pour fermer la fenêtre
+		//créer le bouton pour fermer la fenêtre
 		JButton boutonOk = new JButton("Ok");
 		boutonOk.setFont(controller.tahomaFont12);
 		boutonOk.addActionListener((e) -> {
@@ -43,10 +43,10 @@ public class WindowMessages extends JDialog{
 		
 		add(contentPane);
 
-		//Initialisez cette boîte de dialogue à sa taille préférée
+		//initialisez cette boîte de dialogue à sa taille préférée
 		pack();
 		
-		// Position du parent à l'écran
+		//position du parent à l'écran
 		Point p = parent.getLocationOnScreen();
 		// Position de la boîte de dialogue au centre de la fenêtre parente
 		int posX = p.x + parent.getWidth()/2 - this.getWidth()/2;

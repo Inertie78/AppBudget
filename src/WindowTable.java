@@ -31,12 +31,12 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		setBorder(new EmptyBorder(50, 25, 50, 0));
 		setLayout(new BorderLayout());
 		
-		//Crée l'objet table
+		//crée l'objet table
 		table = new JTable(model){
 
 			private static final long serialVersionUID = 1L;
 
-			//Pour alterner  les couleurs des lignes 
+			//pour alterner  les couleurs des lignes 
 			@Override
 		    public java.awt.Component prepareRenderer(javax.swing.table.TableCellRenderer renderer, int row, int column) {
 		        java.awt.Component c = super.prepareRenderer(renderer, row, column);
@@ -49,20 +49,20 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		    }
 		};
 
-		//Police de la table
+		//police de la table
         table.setFont(this.controller.tahomaFont12);
 	    
-	    // Centrer le texte dans les cellules
+	    //centrer le texte dans les cellules
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i = 0; i < table.getColumnCount(); i++) {
         	table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
         
-        // Ajouter un moteur de rendu et un éditeur personnalisés pour la colonne « Action »
+        //ajouter un moteur de rendu et un éditeur personnalisés pour la colonne « Action »
         refreshButtonRenderer();
 
-        // Ajout de la table dans un JScrollPane
+        //ajout de la table dans un JScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
         
@@ -75,7 +75,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		JLabel labelComboBoxDate = new JLabel("Select: ");
 		labelComboBoxDate.setFont(this.controller.tahomaFont12);
 		
-		// Inscrire l'événement date
+		//inscrire l'événement date
 		this.comboxDates.addActionListener(e -> { onFilterChanged(); });
 		
 		JPanel panelComboBoxSelect = new JPanel();
@@ -89,20 +89,20 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		this.comboxLibelle.setForeground(this.controller.colorSelect);
 		this.comboxLibelle.setSelectedIndex(0);
 		
-		// Ajout du combobox libellé au paneau
+		//ajout du combobox libellé au paneau
 		panelComboBoxSelect.add(this.comboxLibelle);
 		
-		// Inscrire l'événement libelle 
+		//inscrire l'événement libelle 
 		this.comboxLibelle.addActionListener(e -> { onFilterChanged(); });	
 		
 		JPanel panelComboBox = new JPanel();
 		panelComboBox.setBorder(new EmptyBorder(0, 0, 25, 0));
 		panelComboBox.add(panelComboBoxSelect);
 
-		// Ajout du panneau combobox à la fenêtre
+		//ajout du panneau combobox à la fenêtre
 		add(panelComboBox, BorderLayout.NORTH);
 		     
-        //Ajout des infos sur le budget
+        //ajout des infos sur le budget
         JPanel panelInfo = new JPanel();
         panelInfo.setBorder(new EmptyBorder(25, 0, 0, 0));
         
@@ -158,7 +158,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
 		this.labelTotalDebit.setText("CHF " + String.valueOf(this.controller.getSoldeDebit()));
 		this.labelBalance.setText("CHF " + String.valueOf(this.controller.getSolde()));	
 		
-		// Vérifie si la date est déjà dans le combo
+		//vérifie si la date est déjà dans le combo
 		String date = this.controller.getDate();
 		this.comboxDates = checkCombobox(this.comboxDates, date);
 
@@ -173,7 +173,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
      	table.getColumn("Action").setCellEditor(new ButtonEditor(this, this.controller, new JCheckBox()));
 	}
 	
-	// Vérifie si la valeur est déjà dans le combobox
+	//vérifie si la valeur est déjà dans le combobox
 	private JComboBox<String> checkCombobox(JComboBox<String> combobox, String data){
 	 
      	boolean existe = false;
@@ -191,7 +191,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
      	return combobox;
 	}
 	
-	//Est appelé si les filtres changent et applique les filtres
+	//est appelé si les filtres changent et applique les filtres
 	private void onFilterChanged() {
         String selectedDate = (String) this.comboxDates.getSelectedItem();
         String selectedLabel = (String) this.comboxLibelle.getSelectedItem();
@@ -200,7 +200,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
         updateComboBoxes(selectedDate, selectedLabel);
     }
 
-	//Mets à jour les filtres en fonction de leur sélection respective
+	//mets à jour les filtres en fonction de leur sélection respective
     private void updateComboBoxes(String selectedDate, String selectedLabel) {
         // Mise à jour du combo Libellé selon la Date sélectionnée
     	Set<String> labels = new TreeSet<>();
@@ -210,7 +210,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
         for (String label : labels) this.comboxLibelle.addItem(label);
         this.comboxLibelle.setSelectedItem(selectedLabel);
 
-        // Mise à jour du combo Date selon le Libellé sélectionné
+        //mise à jour du combo Date selon le Libellé sélectionné
         Set<String> dates = new TreeSet<>();
         dates = this.controller.getFilteredDates(selectedDate);
         this.comboxDates.removeAllItems();
@@ -220,7 +220,7 @@ public class WindowTable extends JPanel implements PropertyChangeListener{
     }
 }
 
-//Pour ajouter un bouton dans uns cellule du tableau
+//pour ajouter un bouton dans uns cellule du tableau
 class ButtonRenderer extends JButton implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
   
@@ -249,7 +249,7 @@ class ButtonRenderer extends JButton implements TableCellRenderer {
 	 }
 }
 
-//Editeur personnalisé pour le bouton
+//editeur personnalisé pour le bouton
 class ButtonEditor extends DefaultCellEditor {
 	private static final long serialVersionUID = 1L;
 	
@@ -291,7 +291,7 @@ class ButtonEditor extends DefaultCellEditor {
                );
                
                if(result == 0) {
-            	   // Remove line in table
+            	   //remove line in table
             	   controller.removeRow(row);
             	   
             	   if(parent.comboxDates.getItemCount() > row + 1) {
@@ -310,7 +310,7 @@ class ButtonEditor extends DefaultCellEditor {
 	
 	 @Override
 	 public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-	     this.row = row; // Store the row index
+	     this.row = row; 
 	     
 	     return this.button;
 	 }

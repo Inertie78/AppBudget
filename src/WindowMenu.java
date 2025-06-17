@@ -15,7 +15,7 @@ public class WindowMenu  extends JMenuBar{
 		
 		String path = (String) new File("").getAbsolutePath() + "/data";
 		
-		// Créer la menu Fichier
+		//créer la menu Fichier
 		JMenu fileMenu = new JMenu("Fichier");
 		fileMenu.setFont(controller.tahomaFont14);
 		
@@ -25,18 +25,18 @@ public class WindowMenu  extends JMenuBar{
 		JMenuItem saveMenu = new JMenuItem("Sauver");
 		JMenuItem quitMenu = new JMenuItem("Quitter");
 
-		//Police personnalisée
+		//police personnalisée
 		newMenu.setFont(controller.tahomaFont12);
 		openMenu.setFont(controller.tahomaFont12);
 		saveMenu.setFont(controller.tahomaFont12);
 		quitMenu.setFont(controller.tahomaFont12);
 		
-		//Inscrire l'événement nouveau
+		//inscrire l'événement nouveau
 		newMenu.addActionListener((e) -> {
 			parent.restartUI();
 		});
 		
-		//Inscrire l'événement ouvrir
+		//inscrire l'événement ouvrir
 		openMenu.addActionListener((e) -> {
 			
 			controller.clearTable();
@@ -58,7 +58,7 @@ public class WindowMenu  extends JMenuBar{
       	
 		});
 		
-		// Inscrire l'événement sauver
+		//inscrire l'événement sauver
 		saveMenu.addActionListener((e) -> {
 			
 			if (windowTable.table.getRowCount() > 0) {
@@ -74,41 +74,41 @@ public class WindowMenu  extends JMenuBar{
 		});
 		
 		
-		// Inscrire l'événement quitter
+		//inscrire l'événement quitter
 		quitMenu.addActionListener((e) -> {
 	        	System.exit(0);       	
 	    });
 		
 
-		// Ajouter les items au menu Fichier
+		//ajouter les items au menu Fichier
 		fileMenu.add(newMenu);
 		fileMenu.add(openMenu);
 		fileMenu.add(saveMenu);
-		// Ajouter un séparateur
+		//ajouter un séparateur
 		fileMenu.addSeparator(); 
 		fileMenu.add(quitMenu);
 		
-		// Ajouter le menu Fichier à la barre de menu
+		//ajouter le menu Fichier à la barre de menu
 		add(fileMenu);
 		
-		// Créer le menu Aide
+		//créer le menu Aide
 		JMenu helpMenu = new JMenu("Help");
 		
-		//Police personnalisée
+		//police personnalisée
 		helpMenu.setFont(controller.tahomaFont14);
 
-		// Créer l'item du menu Aide
+		//créer l'item du menu Aide
 		JMenuItem aboutMenu = new JMenuItem("About");
 		
-		//Police personnalisée
+		//police personnalisée
 		aboutMenu.setFont(controller.tahomaFont12);
 
-		// Ajouter l'item au menu Aide
+		//ajouter l'item au menu Aide
 		helpMenu.add(aboutMenu);
 
 		add(Box.createHorizontalGlue());
 		
-		// Ajouter le menu Aide à la barre de menu
+		//ajouter le menu Aide à la barre de menu
 		add(helpMenu);
 		
 		aboutMenu.addActionListener((e) -> {

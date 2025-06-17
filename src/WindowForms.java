@@ -29,7 +29,7 @@ public class WindowForms extends JPanel{
 	    gbc.insets = new Insets(10,10,10,10);
 	    gbc.anchor = GridBagConstraints.WEST;
 		
-	    //Positionne les éléments du formulaire sur le panneau
+	    //positionne les éléments du formulaire sur le panneau
 		for (int i = 0; i < this.labels.length; i++) {
             gbc.gridx = 0;
             gbc.gridy = i;
@@ -68,29 +68,29 @@ public class WindowForms extends JPanel{
         JButton btnCredit = new JButton("Crédit");
         JButton btnDebit = new JButton("Débit");
         
-        //Police des butons
+        //police des butons
         btnCredit.setFont(controller.tahomaFont12);
         btnDebit.setFont(controller.tahomaFont12);
 
-        // Inscrire l'événement credit
+        //inscrire l'événement credit
         btnCredit.addActionListener(e -> {
         	if(checkInput(controller)) {
         		controller.addEntry((String) this.fields[0].getText(), Float.parseFloat(this.fields[1].getText()), 0.0f);
         		clearFields();
         	}else {
-        		//Rajouter message d'erreur
+        		//rajouter message d'erreur
         		JOptionPane.showMessageDialog(this,"Merci de renseigner toute les entrées", "Erreur d'entrée", JOptionPane.ERROR_MESSAGE);
         		clearFields();
         	}
         });
 
-        // Inscrire l'événement débit
+        //inscrire l'événement débit
         btnDebit.addActionListener(e -> {
 			if(checkInput(controller)) {
 			     controller.addEntry((String) this.fields[0].getText(), 0.0f, Float.parseFloat(this.fields[1].getText()));
 			     clearFields();
 			}else {
-				//Rajouter message d'erreur
+				//rajouter message d'erreur
 				JOptionPane.showMessageDialog(this,"Merci de renseigner toute les entrées", "Erreur d'entrée", JOptionPane.ERROR_MESSAGE);
 				clearFields();		
 			}
@@ -118,13 +118,13 @@ public class WindowForms extends JPanel{
 		return day != null && month != null && year != null;
 	}
 	
-	//Vide les entrées du formulaire
+	//vide les entrées du formulaire
 	private void clearFields() {
 		for (int i = 0; i < this.fields.length-1; i++) {this.fields[i].setText("");}
 	}
 }
 
-//Classe pour filtrer les entiers positifs. 
+//classe pour filtrer les entiers positifs. 
 class IntFilter extends DocumentFilter {
 	   @Override
 	   public void insertString(FilterBypass fb, int offset, String string,

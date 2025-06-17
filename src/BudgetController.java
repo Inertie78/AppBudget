@@ -12,7 +12,7 @@ public class BudgetController {
 	public final Color colorColumn_01 = new java.awt.Color(80, 80, 80);
 	public final Color colorColumn_02 = new java.awt.Color(60, 60, 60);
 	
-	//Les différentes fonctions qui suivent servent à faire l'interraction avec la classe modèle
+	//les différentes fonctions qui suivent servent à faire l'interraction avec la classe modèle
 	public BudgetController(BudgetModel model) {
         this.model = model;    
     }

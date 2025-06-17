@@ -14,7 +14,7 @@ public class DatePicker extends JPanel{
 		
 		setLayout(new FlowLayout());
 
-        // jour ComboBox
+        //jour ComboBox
 		JComboBox<Integer> dayComboBox = new JComboBox<>();
         dayComboBox.setFont(controller.tahomaFont12);
         dayComboBox.setForeground(controller.colorSelect);
@@ -23,7 +23,7 @@ public class DatePicker extends JPanel{
             dayComboBox.addItem(i);
         }
 
-        // mois ComboBox
+        //mois ComboBox
         JComboBox<String> monthComboBox = new JComboBox<>(new String[]{
         	"janvier", "février", "mars", "avril", "mai", "juin",
             "juillet", "août", "septembre", "octobre", "novembre", "décembre"
@@ -31,7 +31,7 @@ public class DatePicker extends JPanel{
          monthComboBox.setFont(controller.tahomaFont12);
          monthComboBox.setForeground(controller.colorSelect);
 
-        // année ComboBox
+        //année ComboBox
          JComboBox<Integer> yearComboBox = new JComboBox<>();
         yearComboBox.setFont(controller.tahomaFont12);
         yearComboBox.setForeground(controller.colorSelect);
@@ -40,7 +40,7 @@ public class DatePicker extends JPanel{
             yearComboBox.addItem(i);
         }
         
-        // Inscrire l'événement jour (si change)
+        //inscrire l'événement jour (si change)
         dayComboBox.addActionListener(e -> {
         	int value = (int) dayComboBox.getSelectedItem();
         	String day;
@@ -50,12 +50,12 @@ public class DatePicker extends JPanel{
         	controller.setDay(day);
         });
         
-        // Inscrire l'événement mois (si change)
+        //inscrire l'événement mois (si change)
         monthComboBox.addActionListener(e -> {
         	controller.setMonth((String) monthComboBox.getSelectedItem());
         });
         
-        // Inscrire l'événement année (si change)
+        //inscrire l'événement année (si change)
         yearComboBox.addActionListener(e -> {
         	controller.setYear(String.valueOf(yearComboBox.getSelectedItem()));
         });
