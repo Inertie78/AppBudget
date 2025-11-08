@@ -1,5 +1,5 @@
 # AppBudget
-Application de gestion d'un budget personnel.
+Application de gestion d'un budget personnel.  
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 
 # Cahier des charges de l'application
